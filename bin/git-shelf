@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require "thor"
+
+class MyCLI < Thor
+  desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
+
+  def get(category, url)
+    puts "get from #{url} and put it into #{category}"
+  end
+end
+
+MyCLI.start(ARGV)
