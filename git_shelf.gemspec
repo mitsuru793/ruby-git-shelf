@@ -6,11 +6,11 @@ require "git_shelf/version"
 Gem::Specification.new do |spec|
   spec.name          = "git_shelf"
   spec.version       = GitShelf::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["TODO: Write your email address"]
+  spec.authors       = ["mitsuru793"]
+  spec.email         = ["mitsuru793"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Git repository manager for code reading.}
+  spec.description   = %q{Git repository manager for code reading.}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 
