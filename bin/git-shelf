@@ -8,12 +8,13 @@ require 'awesome_print'
 require 'git_shelf'
 
 class MyCLI < Thor
-  @config = File.expand_path('~/.ruby-git-shelf')
-
   desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
+  option :shelf, type: :string
 
   def get(category, url)
-    repository = GitShelf::Repository.from_url(root, url, category, Time.now)
+    config = load_config
+    shelf = File.expand_path(options[:shelf] || config[:shelf])
+    repository = GitShelf::Repository.from_url(shelf, url, category, Time.now)
 
     begin
       repository.shallowClone
@@ -22,33 +23,38 @@ class MyCLI < Thor
     end
   end
 
-  desc "dump ROOT OUT_YAML_PATH", "Dump repositories directory tree each category to OUT_YAML_PATH."
+  desc "dump", "Dump repositories directory tree as a yaml."
+  option :shelf, type: :string
+  option :repository_book, type: :string
 
-  def dump(root, out)
-    repositories = GitShelf::Repositories.from_root_path(root)
+  def dump
+    config = load_config
+    shelf = File.expand_path(options[:shelf] || config[:shelf])
+    repository_book = File.expand_path(options[:repository_book] || config[:repository_book])
+
+    repositories = GitShelf::Repositories.from_root_path(shelf)
     data = {
         repositories: repositories.to_a
     }
-    YAML.dump(data, File.open(out, 'w'))
+    YAML.dump(data, File.open(repository_book, 'w'))
   end
 
   desc "count CATEGORY", "Count CATEGORY of repositories from cached yml."
-  option :cache_file, type: :string, required: true
+  option :repository_book, type: :string
 
   def count(category)
-    cache_file = options[:cache_file]
-    cache = YAML.load_file(cache_file)
+    config = load_config
+    repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
+    repository_book = YAML.load_file(repository_book_path)
 
-    repositories = GitShelf::Repositories.from_array(root, cache[:repositories])
+    repositories = GitShelf::Repositories.from_array(config[:shelf], repository_book[:repositories])
     puts repositories.count(category).to_table
   end
 
   private
-  def root
-    File.join(
-        File.dirname(File.expand_path(__FILE__)),
-        '/tmp'
-    )
+  def load_config
+    config = File.expand_path('~/.ruby-git-shelf')
+    YAML.load_file(config)
   end
 end
 
