@@ -1,12 +1,23 @@
 #!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "thor"
+require 'yaml'
+
+require 'git_shelf'
 
 class MyCLI < Thor
   desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
 
   def get(category, url)
     puts "get from #{url} and put it into #{category}"
+  end
+
+  desc "dump ROOT OUT_YAML_PATH", "Dump repositories directory tree each category to OUT_YAML_PATH."
+
+  def dump(root, out)
+    repositories = GitShelf::Repositories.from_root_path(root)
+    YAML.dump(repositories.to_a, File.open(out, 'w'))
   end
 end
 
