@@ -6,6 +6,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}"}
 gemspec
 
 gem "thor", "~> 0.20.0"
+gem "terminal-table", "~> 1.8"
 
 group :development do
   gem "awesome_print", "~> 1.8"
