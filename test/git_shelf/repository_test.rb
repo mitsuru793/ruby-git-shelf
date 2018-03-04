@@ -24,7 +24,7 @@ class RepositoryTest < Minitest::Test
   def test_shallow_clone
     skip
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
-    repository = GitShelf::Repository.from_url(url)
+    repository = GitShelf::Repository.from_url(url, 'ruby')
     repository.shallowClone('hoge')
   end
 

@@ -21,7 +21,7 @@ module GitShelf
     # @param author [String] repository author
     # @param host [String] domain has repository
     # @param category [String, nil]
-    def initialize(name, author, host, category = nil)
+    def initialize(name, author, host, category)
       @name = name
       @author = author
       @host = host
@@ -32,7 +32,7 @@ module GitShelf
     # @param url [String] ex: 'https://github.com/mitsuru793/ruby-git-shelf'
     # @param category [String, nil]
     # @return [self]
-    def self.from_url(url, category = nil)
+    def self.from_url(url, category)
       uri = URI.parse(url)
       (author, name) = uri.path.sub(/^\//, '').split('/')
       new(name, author, uri.host, category)
@@ -41,7 +41,7 @@ module GitShelf
     # @param path [String] ex: 'github.com/mitsuru793/ruby-git-shelf'
     # @param category [String, nil]
     # @return [self]
-    def self.from_path(path, category = nil)
+    def self.from_path(path, category)
       (host, author, name) = path.split('/').slice(-3, 3)
       url = "https://#{host}/#{author}/#{name}"
       self.from_url(url, category)
