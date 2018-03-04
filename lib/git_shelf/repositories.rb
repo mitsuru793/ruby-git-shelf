@@ -7,11 +7,13 @@ module GitShelf
     # @return [Array<Repository>]
     attr_reader :items
 
+    # @param repositories [Array<Repository>]
     def initialize(repositories)
       @items = repositories
     end
 
     # @param root [String]
+    # @return self
     def self.from_root_path(root)
       repositories = []
       Find.find(root) {|path|
@@ -23,6 +25,9 @@ module GitShelf
       new(repositories)
     end
 
+    # @param root [String] git shelf root path
+    # @param repositories_data [Array<Hash>]
+    # @return self
     def self.from_array(root, repositories_data)
       repositories = []
       repositories_data.each do |repo|
@@ -38,6 +43,8 @@ module GitShelf
       @items.map {|repo| repo.to_h}
     end
 
+    # @param key [string] count key of repository
+    # @return [Counter]
     def count(key)
       counter = GitShelf::Counter.new(key)
       @items.each do |repo|
