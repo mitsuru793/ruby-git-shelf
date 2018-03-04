@@ -1,5 +1,7 @@
 require 'find'
 
+require 'git_shelf/counter'
+
 module GitShelf
   class Repositories
     # @return [Array<Repository>]
@@ -30,9 +32,18 @@ module GitShelf
       end
       return new(repositories)
     end
+
     # @return [Array<Hash>]
     def to_a
       @items.map {|repo| repo.to_h}
+    end
+
+    def count(key)
+      counter = GitShelf::Counter.new(key)
+      @items.each do |repo|
+        counter.succ!(repo.instance_variable_get("@#{key}"))
+      end
+      counter
     end
   end
 end

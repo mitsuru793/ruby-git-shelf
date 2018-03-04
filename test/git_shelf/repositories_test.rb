@@ -43,6 +43,26 @@ class RepositoriesTest < Minitest::Test
     assert_all_item_instance_of(Hash, array)
   end
 
+  def test_from_count
+    data = [
+        repository_hash(category: 'ruby'),
+        repository_hash(category: 'ruby'),
+        repository_hash(category: 'php'),
+    ]
+    repositories = GitShelf::Repositories.from_array(data)
+    counter = repositories.count('category')
+
+    expected = <<-EOF
++----------+-------+
+| Category | Count |
++----------+-------+
+| php      | 1     |
+| ruby     | 2     |
++----------+-------+
+    EOF
+    assert_equal(expected.chomp, counter.to_table.to_s)
+  end
+
   private
   def repository_hash(override = {})
     @dummy_repository_count += 1
