@@ -64,7 +64,7 @@ module GitShelf
     def shallowClone
       raise StandardError.new("Already cloned: #{path}") if Dir.exist?(@path)
       FileUtils.mkdir_p(@path)
-      `git clone --depth 1 #{@url} #{@path}`
+      system('git', 'clone', '--depth=1', @url, @path)
     end
 
     # @return [Hash]
