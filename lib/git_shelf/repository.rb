@@ -26,5 +26,14 @@ module GitShelf
     def shallowClone(directory)
       `git clone --depth 1 #{@url} #{directory}`
     end
+
+    def to_h
+      {
+          url: @url,
+          name: @name,
+          author: @author,
+          host: @host,
+      }
+    end
   end
 end

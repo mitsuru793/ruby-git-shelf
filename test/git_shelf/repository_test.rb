@@ -25,4 +25,15 @@ class RepositoryTest < Minitest::Test
     repository = GitShelf::Repository.from_url(url)
     repository.shallowClone('hoge')
   end
+
+  def to_h
+    path = 'github.com/mitsuru793/ruby-git-shelf'
+    repository = GitShelf::Repository.from_path(path)
+    hash = repository.to_h
+
+    assert_equal('github.com', hash[:host])
+    assert_equal('mitsuru793', hash[:author])
+    assert_equal('ruby-git-shelf', hash[:name])
+    assert_equal(url, hash[:url])
+  end
 end
