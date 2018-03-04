@@ -22,6 +22,17 @@ class MyCLI < Thor
     }
     YAML.dump(data, File.open(out, 'w'))
   end
+
+  desc "count CATEGORY", "Count CATEGORY of repositories from cached yml."
+  option :cache_file, type: :string, required: true
+
+  def count(category)
+    cache_file = options[:cache_file]
+    cache = YAML.load_file(cache_file)
+
+    repositories = GitShelf::Repositories.from_array(cache[:repositories])
+    puts repositories.count(category).to_table
+  end
 end
 
 MyCLI.start(ARGV)
