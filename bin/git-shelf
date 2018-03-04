@@ -17,7 +17,10 @@ class MyCLI < Thor
 
   def dump(root, out)
     repositories = GitShelf::Repositories.from_root_path(root)
-    YAML.dump(repositories.to_a, File.open(out, 'w'))
+    data = {
+        repositories: repositories.to_a
+    }
+    YAML.dump(data, File.open(out, 'w'))
   end
 end
 
