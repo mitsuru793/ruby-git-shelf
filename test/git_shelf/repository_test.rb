@@ -1,42 +1,52 @@
 require "test_helper"
 
 class RepositoryTest < Minitest::Test
+  def setup
+    @tmpDir = TmpDir.new
+  end
+
   def test_from_url
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
-    repository = GitShelf::Repository.from_url(url, 'ruby')
+    cloned_at = Time.now
+    repository = GitShelf::Repository.from_url(url, 'ruby', cloned_at)
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
     assert_equal(url, repository.url)
     assert_equal('ruby', repository.category)
+    assert_equal(cloned_at, repository.cloned_at)
   end
 
   def test_from_path
-    path = 'github.com/mitsuru793/ruby-git-shelf'
+    git_dir = 'github.com/mitsuru793/ruby-git-shelf'
+    path = @tmpDir.createGitDir(git_dir)
     repository = GitShelf::Repository.from_path(path, 'ruby')
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
-    assert_equal("https://#{path}", repository.url)
+    assert_equal("https://#{git_dir}", repository.url)
     assert_equal('ruby', repository.category)
+    assert_equal(File::Stat.new(path).birthtime, repository.cloned_at)
   end
 
   def test_shallow_clone
     skip
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
-    repository = GitShelf::Repository.from_url(url, 'ruby')
+    repository = GitShelf::Repository.from_url(url, 'ruby', Time.now)
     repository.shallowClone('hoge')
   end
 
-  def to_h
-    path = 'github.com/mitsuru793/ruby-git-shelf'
+  def test_to_h
+    git_dir = 'github.com/mitsuru793/ruby-git-shelf'
+    path = @tmpDir.createGitDir(git_dir)
     repository = GitShelf::Repository.from_path(path, 'ruby')
     hash = repository.to_h
 
     assert_equal('github.com', hash[:host])
     assert_equal('mitsuru793', hash[:author])
     assert_equal('ruby-git-shelf', hash[:name])
-    assert_equal(url, hash[:url])
+    assert_equal("https://#{git_dir}", hash[:url])
     assert_equal('ruby', hash[:category])
+    assert_equal(File::Stat.new(path).birthtime, hash[:cloned_at])
   end
 end
