@@ -3,3 +3,20 @@ require "git_shelf"
 
 require "minitest/autorun"
 require "awesome_print"
+
+class TmpDir
+  # @param [String]
+  attr_reader :root
+
+  def initialize
+    @root = Dir.mktmpdir
+  end
+
+  # @param dir [String] directory path
+  # @return [String]
+  def createGitDir(dir)
+    git_dir = FileUtils.mkdir_p("#{@root}/#{dir}")[0]
+    Dir.mkdir("#{git_dir}/.git")
+    return git_dir
+  end
+end
