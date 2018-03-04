@@ -27,7 +27,7 @@ class RepositoriesTest < Minitest::Test
 
   def test_from_array
     data = [repository_hash, repository_hash]
-    repositories = GitShelf::Repositories.from_array(data)
+    repositories = GitShelf::Repositories.from_array('root', data)
     assert_instance_of(GitShelf::Repositories, repositories)
 
     assert_equal(data.size, repositories.items.size)
@@ -49,7 +49,7 @@ class RepositoriesTest < Minitest::Test
         repository_hash(category: 'ruby'),
         repository_hash(category: 'php'),
     ]
-    repositories = GitShelf::Repositories.from_array(data)
+    repositories = GitShelf::Repositories.from_array('root', data)
     counter = repositories.count('category')
 
     expected = <<-EOF

@@ -8,7 +8,8 @@ class RepositoryTest < Minitest::Test
   def test_from_url
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
     cloned_at = Time.now
-    repository = GitShelf::Repository.from_url(url, 'ruby', cloned_at)
+    repository = GitShelf::Repository.from_url('root', url, 'ruby', cloned_at)
+    assert_equal('root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path)
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
@@ -20,7 +21,8 @@ class RepositoryTest < Minitest::Test
   def test_from_path
     git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
     path = @tmpDir.createGitDir(git_dir)
-    repository = GitShelf::Repository.from_path(path)
+    repository = GitShelf::Repository.from_path('root', path)
+    assert_equal('root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path)
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
@@ -32,16 +34,18 @@ class RepositoryTest < Minitest::Test
   def test_shallow_clone
     skip
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
-    repository = GitShelf::Repository.from_url(url, 'ruby', Time.now)
-    repository.shallowClone('hoge')
+    repository = GitShelf::Repository.from_url('root', url, 'ruby', Time.now)
+    repository.shallowClone
   end
 
   def test_to_h
     git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
     path = @tmpDir.createGitDir(git_dir)
-    repository = GitShelf::Repository.from_path(path)
+    repository = GitShelf::Repository.from_path('root', path)
     hash = repository.to_h
 
+    refute(hash.has_key?(:path))
+    refute(hash.has_key?(:root))
     assert_equal('github.com', hash[:host])
     assert_equal('mitsuru793', hash[:author])
     assert_equal('ruby-git-shelf', hash[:name])

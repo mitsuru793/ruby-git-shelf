@@ -16,18 +16,18 @@ module GitShelf
       repositories = []
       Find.find(root) {|path|
         next unless Dir.exist?(File.join(path, '.git'))
-        repository = GitShelf::Repository.from_path(path)
+        repository = GitShelf::Repository.from_path(root, path)
         repositories.push(repository)
         Find.prune
       }
       new(repositories)
     end
 
-    def self.from_array(repositories_data)
+    def self.from_array(root, repositories_data)
       repositories = []
       repositories_data.each do |repo|
         repositories.push(GitShelf::Repository.new(
-            repo[:name], repo[:author], repo[:host], repo[:category], repo[:cloned_at]
+            root, repo[:name], repo[:author], repo[:host], repo[:category], repo[:cloned_at]
         ))
       end
       return new(repositories)

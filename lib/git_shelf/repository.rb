@@ -1,4 +1,5 @@
 require 'uri'
+require 'fileutils'
 
 module GitShelf
   class Repository
@@ -20,42 +21,50 @@ module GitShelf
     # @return [Time]
     attr_reader :cloned_at
 
+    # @return [String]
+    attr_reader :path
+
+    # @param root [String] git shelf root path
     # @param name [String] repository name
     # @param author [String] repository author
     # @param host [String] domain has repository
     # @param category [String, nil]
     # @param cloned_at [Time]
-    def initialize(name, author, host, category, cloned_at)
+    def initialize(root, name, author, host, category, cloned_at)
       @name = name
       @author = author
       @host = host
       @url = sprintf('https://%s/%s/%s', host, author, name)
       @category = category
+      @path = File.join(root, @category, @host, @author, @name)
       @cloned_at = cloned_at
     end
 
+    # @param root [String] git shelf root path
     # @param url [String] ex: 'https://github.com/mitsuru793/ruby-git-shelf'
     # @param category [String, nil]
     # @param cloned_at [Time]
     # @return [self]
-    def self.from_url(url, category, cloned_at)
+    def self.from_url(root, url, category, cloned_at)
       uri = URI.parse(url)
       (author, name) = uri.path.sub(/^\//, '').split('/')
-      new(name, author, uri.host, category, cloned_at)
+      new(root, name, author, uri.host, category, cloned_at)
     end
 
+    # @param root [String] git shelf root path
     # @param path [String] ex: 'github.com/mitsuru793/ruby-git-shelf'
     # @return [self]
-    def self.from_path(path)
+    def self.from_path(root, path)
       (category, host, author, name) = path.split('/').slice(-4, 4)
       url = "https://#{host}/#{author}/#{name}"
-      self.from_url(url, category, File::Stat.new(path).birthtime)
+      self.from_url(root, url, category, File::Stat.new(path).birthtime)
     end
 
-    # @param directory [String] ex: 'github.com/mitsuru793/ruby-git-shelf'
     # @return [void]
-    def shallowClone(directory)
-      `git clone --depth 1 #{@url} #{directory}`
+    def shallowClone
+      raise StandardError.new("Already cloned: #{path}") if Dir.exist?(@path)
+      FileUtils.mkdir_p(@path)
+      `git clone --depth 1 #{@url} #{@path}`
     end
 
     # @return [Hash]
