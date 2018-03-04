@@ -3,14 +3,23 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "thor"
 require 'yaml'
+require 'awesome_print'
 
 require 'git_shelf'
 
 class MyCLI < Thor
+  @config = File.expand_path('~/.ruby-git-shelf')
+
   desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
 
   def get(category, url)
-    puts "get from #{url} and put it into #{category}"
+    repository = GitShelf::Repository.from_url(root, url, category, Time.now)
+
+    begin
+      repository.shallowClone
+    rescue StandardError => ex
+      puts ex
+    end
   end
 
   desc "dump ROOT OUT_YAML_PATH", "Dump repositories directory tree each category to OUT_YAML_PATH."
@@ -30,8 +39,16 @@ class MyCLI < Thor
     cache_file = options[:cache_file]
     cache = YAML.load_file(cache_file)
 
-    repositories = GitShelf::Repositories.from_array(cache[:repositories])
+    repositories = GitShelf::Repositories.from_array(root, cache[:repositories])
     puts repositories.count(category).to_table
+  end
+
+  private
+  def root
+    File.join(
+        File.dirname(File.expand_path(__FILE__)),
+        '/tmp'
+    )
   end
 end
 
