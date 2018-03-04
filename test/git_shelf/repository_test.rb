@@ -18,13 +18,13 @@ class RepositoryTest < Minitest::Test
   end
 
   def test_from_path
-    git_dir = 'github.com/mitsuru793/ruby-git-shelf'
+    git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
     path = @tmpDir.createGitDir(git_dir)
-    repository = GitShelf::Repository.from_path(path, 'ruby')
+    repository = GitShelf::Repository.from_path(path)
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
-    assert_equal("https://#{git_dir}", repository.url)
+    assert_equal("https://github.com/mitsuru793/ruby-git-shelf", repository.url)
     assert_equal('ruby', repository.category)
     assert_equal(File::Stat.new(path).birthtime, repository.cloned_at)
   end
@@ -37,15 +37,15 @@ class RepositoryTest < Minitest::Test
   end
 
   def test_to_h
-    git_dir = 'github.com/mitsuru793/ruby-git-shelf'
+    git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
     path = @tmpDir.createGitDir(git_dir)
-    repository = GitShelf::Repository.from_path(path, 'ruby')
+    repository = GitShelf::Repository.from_path(path)
     hash = repository.to_h
 
     assert_equal('github.com', hash[:host])
     assert_equal('mitsuru793', hash[:author])
     assert_equal('ruby-git-shelf', hash[:name])
-    assert_equal("https://#{git_dir}", hash[:url])
+    assert_equal("https://github.com/mitsuru793/ruby-git-shelf", hash[:url])
     assert_equal('ruby', hash[:category])
     assert_equal(File::Stat.new(path).birthtime, hash[:cloned_at])
   end

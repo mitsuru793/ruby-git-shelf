@@ -15,7 +15,7 @@ module GitShelf
       Find.find(root) {|path|
         next unless path.match(/\.git$/)
         dir = File.dirname(path)
-        repository = GitShelf::Repository.from_path(dir, nil)
+        repository = GitShelf::Repository.from_path(dir)
         repositories.push(repository)
         Find.prune
       }

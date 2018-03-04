@@ -45,10 +45,9 @@ module GitShelf
     end
 
     # @param path [String] ex: 'github.com/mitsuru793/ruby-git-shelf'
-    # @param category [String, nil]
     # @return [self]
-    def self.from_path(path, category)
-      (host, author, name) = path.split('/').slice(-3, 3)
+    def self.from_path(path)
+      (category, host, author, name) = path.split('/').slice(-4, 4)
       url = "https://#{host}/#{author}/#{name}"
       self.from_url(url, category, File::Stat.new(path).birthtime)
     end
