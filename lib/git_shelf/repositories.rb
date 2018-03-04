@@ -13,9 +13,8 @@ module GitShelf
     def self.from_root_path(root)
       repositories = []
       Find.find(root) {|path|
-        next unless path.match(/\.git$/)
-        dir = File.dirname(path)
-        repository = GitShelf::Repository.from_path(dir)
+        next unless Dir.exist?(File.join(path, '.git'))
+        repository = GitShelf::Repository.from_path(path)
         repositories.push(repository)
         Find.prune
       }

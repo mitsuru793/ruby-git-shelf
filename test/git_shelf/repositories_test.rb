@@ -10,6 +10,7 @@ class RepositoriesTest < Minitest::Test
       ruby/github.com/mike/repo1
       ruby/github.com/mike/repo2
       php/github.com/jane/repo3
+      php/github.com/jane/repo3/sub/.git
     ]
     @git_paths.each do |p|
       @tmpDir.createGitDir(p)
@@ -19,7 +20,7 @@ class RepositoriesTest < Minitest::Test
   def test_from_root_path
     repositories = GitShelf::Repositories.from_root_path(@tmpDir.root)
 
-    assert_equal(@git_paths.size, repositories.items.size)
+    assert_equal(@git_paths.size - 1, repositories.items.size)
     assert_all_item_instance_of(GitShelf::Repository, repositories.items)
   end
 
@@ -27,7 +28,7 @@ class RepositoriesTest < Minitest::Test
     repositories = GitShelf::Repositories.from_root_path(@tmpDir.root)
     array = repositories.to_a
 
-    assert_equal(@git_paths.size, repositories.items.size)
+    assert_equal(@git_paths.size - 1, repositories.items.size)
     assert_all_item_instance_of(Hash, array)
   end
 end
