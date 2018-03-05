@@ -4,6 +4,7 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "thor"
 require 'yaml'
 require 'awesome_print'
+require 'shell'
 
 require 'git_shelf'
 
@@ -21,6 +22,22 @@ class MyCLI < Thor
     rescue StandardError => ex
       puts ex
     end
+  end
+
+  desc "list [CATEGORY]", ""
+  option :shelf, type: :string
+  option :repository_book, type: :string
+
+  def list(category = nil)
+    config = load_config
+    shelf = File.expand_path(options[:shelf] || config[:shelf])
+    repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
+    repository_book = YAML.load_file(repository_book_path)
+
+    repositories = GitShelf::Repositories.from_array(shelf, repository_book[:repositories])
+
+    items = category.nil? ? repositories.items : repositories.items.select {|r| r.category == category}
+    puts items.map {|r| r.path}.join("\n")
   end
 
   desc "dump", "Dump repositories directory tree as a yaml."
