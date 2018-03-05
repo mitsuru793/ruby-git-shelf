@@ -24,7 +24,7 @@ class MyCLI < Thor
     end
   end
 
-  desc "list [CATEGORY]", ""
+  desc "list [CATEGORY]", "list repository paths each category"
   option :shelf, type: :string
   option :repository_book, type: :string
   option :base_path, type: :boolean, defalut: true
