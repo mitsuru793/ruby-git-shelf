@@ -1,4 +1,4 @@
-# GitShelf
+# GitShelf [![Build Status](https://travis-ci.org/mitsuru793/ruby-git-shelf.svg?branch=master)](https://travis-ci.org/mitsuru793/ruby-git-shelf)
 
 GitShelf manages repositories cloned through it. If you clone repository with GitShelf, they are cached their data to a yaml and put each category directory.
 
