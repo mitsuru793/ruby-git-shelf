@@ -27,7 +27,7 @@ class MyCLI < Thor
   desc "list [CATEGORY]", "list repository paths each category"
   option :shelf, type: :string
   option :repository_book, type: :string
-  option :base_path, type: :boolean, defalut: true
+  option :base_path, type: :boolean, default: true
 
   def list(category = nil)
     config = load_config
