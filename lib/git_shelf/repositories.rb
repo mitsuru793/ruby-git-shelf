@@ -4,8 +4,7 @@ require 'git_shelf/counter'
 
 module GitShelf
   class Repositories
-    # @return [Array<Repository>]
-    attr_reader :items
+    include Enumerable
 
     # @param repositories [Array<Repository>]
     def initialize(repositories)
@@ -38,6 +37,10 @@ module GitShelf
       return new(repositories)
     end
 
+    def each
+      @items.map {|item| yield item}
+    end
+
     # @return [Array<Hash>]
     def to_a
       @items.map {|repo| repo.to_h}
@@ -51,6 +54,17 @@ module GitShelf
         counter.succ!(repo.instance_variable_get("@#{key}"))
       end
       counter
+    end
+
+    # @param repository [Repository]
+    # @return [void]
+    def push(repository)
+      @items.push(repository)
+    end
+
+    # @return [Integer]
+    def size
+      @items.size
     end
   end
 end

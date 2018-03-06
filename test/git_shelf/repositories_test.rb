@@ -21,8 +21,8 @@ class RepositoriesTest < Minitest::Test
   def test_from_root_path
     repositories = GitShelf::Repositories.from_root_path(@tmpDir.root)
 
-    assert_equal(@git_paths.size - 1, repositories.items.size)
-    assert_all_item_instance_of(GitShelf::Repository, repositories.items)
+    assert_equal(@git_paths.size - 1, repositories.size)
+    assert_all_item_instance_of(GitShelf::Repository, repositories)
   end
 
   def test_from_array
@@ -30,16 +30,16 @@ class RepositoriesTest < Minitest::Test
     repositories = GitShelf::Repositories.from_array('root', data)
     assert_instance_of(GitShelf::Repositories, repositories)
 
-    assert_equal(data.size, repositories.items.size)
-    assert(repositories.items.any? {|r| r.name == 'name1'})
-    assert(repositories.items.any? {|r| r.name == 'name2'})
+    assert_equal(data.size, repositories.size)
+    assert(repositories.any? {|r| r.name == 'name1'})
+    assert(repositories.any? {|r| r.name == 'name2'})
   end
 
   def test_to_a
     repositories = GitShelf::Repositories.from_root_path(@tmpDir.root)
     array = repositories.to_a
 
-    assert_equal(@git_paths.size - 1, repositories.items.size)
+    assert_equal(@git_paths.size - 1, repositories.size)
     assert_all_item_instance_of(Hash, array)
   end
 

@@ -27,7 +27,7 @@ class MyCLI < Thor
     repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
     repository_book = YAML.load_file(repository_book_path)
     repositories = GitShelf::Repositories.from_array(shelf, repository_book[:repositories])
-    repositories.items << repository
+    repositories.push(repository)
     data = {
         repositories: repositories.to_a
     }
@@ -46,7 +46,7 @@ class MyCLI < Thor
 
     repositories = GitShelf::Repositories.from_array(shelf, repository_book[:repositories])
 
-    items = category.nil? ? repositories.items : repositories.items.select {|r| r.category == category}
+    items = category.nil? ? repositories : repositories.select {|r| r.category == category}
     puts items.map {|r|
       if options[:base_path]
         r.path
