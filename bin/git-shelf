@@ -11,21 +11,30 @@ require 'git_shelf'
 class MyCLI < Thor
   desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
   option :shelf, type: :string
+  option :repository_book, type: :string
 
   def get(category, url)
     config = load_config
+
     shelf = File.expand_path(options[:shelf] || config[:shelf])
     repository = GitShelf::Repository.from_url(shelf, url, category, Time.now)
-
     begin
       repository.shallowClone
     rescue StandardError => ex
       puts ex
     end
+
+    repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
+    repository_book = YAML.load_file(repository_book_path)
+    repositories = GitShelf::Repositories.from_array(shelf, repository_book[:repositories])
+    repositories.items << repository
+    data = {
+        repositories: repositories.to_a
+    }
+    YAML.dump(data, File.open(repository_book_path, 'w'))
   end
 
   desc "list [CATEGORY]", "list repository paths each category"
-  option :shelf, type: :string
   option :repository_book, type: :string
   option :base_path, type: :boolean, default: true
 
