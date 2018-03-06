@@ -43,7 +43,7 @@ module GitShelf
       @items.map {|repo| repo.to_h}
     end
 
-    # @param key [string] count key of repository
+    # @param key [String] count key of repository
     # @return [Counter]
     def count(key)
       counter = GitShelf::Counter.new(key)
