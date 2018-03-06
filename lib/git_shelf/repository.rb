@@ -18,7 +18,9 @@ module GitShelf
     # @return [String, nil]
     attr_reader :category
 
-    # @return [Time]
+    # Linux doesn't implement birthtime. It's needed when dump from existed repositories.
+    # So, allow nil.
+    # @return [Time, nil]
     attr_reader :cloned_at
 
     # @return [String]
@@ -57,7 +59,12 @@ module GitShelf
     def self.from_path(root, path)
       (category, host, author, name) = path.split('/').slice(-4, 4)
       url = "https://#{host}/#{author}/#{name}"
-      self.from_url(root, url, category, File::Stat.new(path).birthtime)
+      begin
+        cloned_at = File::Stat.new(path).birthtime
+      rescue NotImplementedError => e
+        cloned_at = nil
+      end
+      self.from_url(root, url, category, cloned_at)
     end
 
     # @return [void]
