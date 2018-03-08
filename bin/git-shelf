@@ -11,7 +11,6 @@ require 'git_shelf'
 class MyCLI < Thor
   desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
   option :shelf, type: :string
-  option :repository_book, type: :string
 
   def get(category, url)
     config = load_config
@@ -24,27 +23,19 @@ class MyCLI < Thor
       puts ex
     end
 
-    repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
-    repository_book = YAML.load_file(repository_book_path)
-    repositories = GitShelf::Repositories.from_array(shelf, repository_book[:repositories])
-    repositories.push(repository)
-    data = {
-        repositories: repositories.to_a
-    }
-    YAML.dump(data, File.open(repository_book_path, 'w'))
+    repository_book = GitShelf::RepositoryBook.load(config)
+    repository_book.save(config[:repository_book])
   end
 
   desc "list [CATEGORY]", "list repository paths each category"
-  option :repository_book, type: :string
   option :base_path, type: :boolean, default: true
 
   def list(category = nil)
     config = load_config
     shelf = File.expand_path(options[:shelf] || config[:shelf])
-    repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
-    repository_book = YAML.load_file(repository_book_path)
 
-    repositories = GitShelf::Repositories.from_array(shelf, repository_book[:repositories])
+    repository_book = GitShelf::RepositoryBook.load(config)
+    repositories = repository_book.repositories
 
     items = category.nil? ? repositories : repositories.select {|r| r.category == category}
     puts items.map {|r|
@@ -59,36 +50,25 @@ class MyCLI < Thor
 
   desc "dump", "Dump repositories directory tree as a yaml."
   option :shelf, type: :string
-  option :repository_book, type: :string
 
   def dump
     config = load_config
-    shelf = File.expand_path(options[:shelf] || config[:shelf])
-    repository_book = File.expand_path(options[:repository_book] || config[:repository_book])
-
-    repositories = GitShelf::Repositories.from_root_path(shelf)
-    data = {
-        repositories: repositories.to_a
-    }
-    YAML.dump(data, File.open(repository_book, 'w'))
+    repository_book = GitShelf::RepositoryBook.load(config)
+    repository_book.save(config[:repository_book])
   end
 
   desc "count CATEGORY", "Count CATEGORY of repositories from cached yml."
-  option :repository_book, type: :string
 
   def count(category)
     config = load_config
-    repository_book_path = File.expand_path(options[:repository_book] || config[:repository_book])
-    repository_book = YAML.load_file(repository_book_path)
-
-    repositories = GitShelf::Repositories.from_array(config[:shelf], repository_book[:repositories])
-    puts repositories.count(category).to_table
+    repository_book = GitShelf::RepositoryBook.load(config)
+    puts repository_book.repositories.count(category).to_table
   end
 
   private
   def load_config
-    config = File.expand_path('~/.ruby-git-shelf')
-    YAML.load_file(config)
+    config_path = File.expand_path('~/.ruby-git-shelf')
+    YAML.load_file(config_path)
   end
 end
 
