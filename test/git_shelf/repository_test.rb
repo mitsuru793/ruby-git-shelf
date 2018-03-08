@@ -35,7 +35,7 @@ class RepositoryTest < Minitest::Test
     skip
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
     repository = GitShelf::Repository.from_url('root', url, 'ruby', Time.now)
-    repository.shallowClone
+    repository.shallow_clone
   end
 
   def test_to_h

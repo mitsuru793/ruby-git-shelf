@@ -19,7 +19,7 @@ class MyCLI < Thor
     shelf = File.expand_path(options[:shelf] || config[:shelf])
     repository = GitShelf::Repository.from_url(shelf, url, category, Time.now)
     begin
-      repository.shallowClone
+      repository.shallow_clone
     rescue StandardError => ex
       puts ex
     end
