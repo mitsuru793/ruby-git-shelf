@@ -16,7 +16,7 @@ class TmpDir
 
   # @param dir [String] directory path
   # @return [String]
-  def createGitDir(dir)
+  def create_git_dir(dir)
     git_dir = FileUtils.mkdir_p("#{@root}/#{dir}")[0]
     Dir.mkdir("#{git_dir}/.git")
     return git_dir

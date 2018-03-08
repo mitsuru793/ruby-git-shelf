@@ -14,7 +14,7 @@ class RepositoriesTest < Minitest::Test
       php/github.com/jane/repo3/sub/.git
     ]
     @git_paths.each do |p|
-      @tmpDir.createGitDir(p)
+      @tmpDir.create_git_dir(p)
     end
   end
 

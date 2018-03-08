@@ -20,7 +20,7 @@ class RepositoryTest < Minitest::Test
 
   def test_from_path
     git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
-    path = @tmpDir.createGitDir(git_dir)
+    path = @tmpDir.create_git_dir(git_dir)
     repository = GitShelf::Repository.from_path('root', path)
     assert_equal('root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path)
     assert_equal('github.com', repository.host)
@@ -41,7 +41,7 @@ class RepositoryTest < Minitest::Test
 
   def test_to_h
     git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
-    path = @tmpDir.createGitDir(git_dir)
+    path = @tmpDir.create_git_dir(git_dir)
     repository = GitShelf::Repository.from_path('root', path)
     hash = repository.to_h
 
