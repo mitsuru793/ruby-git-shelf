@@ -56,6 +56,12 @@ module GitShelf
       counter
     end
 
+    # @param nth [Integer]
+    # @return Repository
+    def fetch(nth)
+      @items.fetch(nth)
+    end
+
     # @param repository [Repository]
     # @return [void]
     def push(repository)
