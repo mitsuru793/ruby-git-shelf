@@ -62,7 +62,7 @@ class RepositoryTest < Minitest::Test
     begin
       expected = File::Stat.new(path).birthtime
       assert_equal(expected, actual)
-    rescue NotImplementedError => e
+    rescue NotImplementedError
       assert_nil(actual)
     end
   end
