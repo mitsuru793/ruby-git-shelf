@@ -28,8 +28,7 @@ class RepositoryTest < Minitest::Test
     assert_equal('ruby-git-shelf', repository.name)
     assert_equal('https://github.com/mitsuru793/ruby-git-shelf', repository.url)
     assert_equal('ruby', repository.category)
-
-    assert_equal(cloned_at(path), repository.cloned_at)
+    assert_equal_birthtime(path, repository.cloned_at)
   end
 
   def test_shallow_clone
@@ -52,18 +51,19 @@ class RepositoryTest < Minitest::Test
     assert_equal('ruby-git-shelf', hash[:name])
     assert_equal('https://github.com/mitsuru793/ruby-git-shelf', hash[:url])
     assert_equal('ruby', hash[:category])
-    assert_equal(cloned_at(path), hash[:cloned_at])
+    assert_equal_birthtime(path, hash[:cloned_at])
   end
 
   private
 
   # @param path [String]
   # @return [Time, nil]
-  def cloned_at(path)
+  def assert_equal_birthtime(path, actual)
     begin
-      File::Stat.new(path).birthtime
+      expected = File::Stat.new(path).birthtime
+      assert_equal(expected, actual)
     rescue NotImplementedError => e
-      nil
+      assert_nil(actual)
     end
   end
 end
