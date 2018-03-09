@@ -38,7 +38,7 @@ module GitShelf
       @host = host
       @url = sprintf('https://%s/%s/%s', host, author, name)
       @category = category
-      @path = File.join(root, @category, @host, @author, @name)
+      @path = File.expand_path(File.join(root, @category, @host, @author, @name))
       @cloned_at = cloned_at
     end
 

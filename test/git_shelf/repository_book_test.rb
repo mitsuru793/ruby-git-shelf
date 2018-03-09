@@ -56,11 +56,11 @@ class RepositoryBookTest < Minitest::Test
   end
 
   def test_save
-    repositories = GitShelf::Repositories.from_array('root', @repositories_data)
+    repositories = GitShelf::Repositories.from_array('/root', @repositories_data)
     GitShelf::RepositoryBook.new(repositories)
 
     assert_equal(2, repositories.size)
-    assert_equal('root/ruby/github.com/mike/repo1', repositories.fetch(0).path)
-    assert_equal('root/ruby/github.com/mike/repo2', repositories.fetch(1).path)
+    assert_equal('/root/ruby/github.com/mike/repo1', repositories.fetch(0).path)
+    assert_equal('/root/ruby/github.com/mike/repo2', repositories.fetch(1).path)
   end
 end
