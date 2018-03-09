@@ -16,6 +16,16 @@ class MyCLI < Thor
   def get(category, url)
     config = load_config
 
+    category_dir = File.expand_path(File.join(config[:shelf], category))
+    if !Dir.exist?(category_dir)
+      puts "Directory does not exist: #{category_dir}."
+      answer = ask('Do you make this directory and clone in it? [yes/no] ')
+      unless answer.match('yes')
+        puts 'Cancel to clone a repository.'
+        return
+      end
+    end
+
     repository = GitShelf::Repository.from_url(config[:shelf], url, category, Time.now)
     begin
       repository.shallow_clone
@@ -68,6 +78,11 @@ class MyCLI < Thor
     config_path = File.expand_path(options[:config_path] || '~/.ruby-git-shelf')
     config_path = File.readlink(config_path) if File.symlink?(config_path)
     YAML.load_file(config_path)
+  end
+
+  def ask(prompt = "", newline = false)
+    prompt += "\n" if newline
+    Readline.readline(prompt, true).squeeze(" ").strip
   end
 end
 
