@@ -75,7 +75,7 @@ class MyCLI < Thor
 
   private
   def load_config
-    config_path = File.expand_path(options[:config_path] || '~/.ruby-git-shelf')
+    config_path = File.expand_path(options[:config_path] || '~/.git-shelf')
     config_path = File.readlink(config_path) if File.symlink?(config_path)
     YAML.load_file(config_path)
   end
