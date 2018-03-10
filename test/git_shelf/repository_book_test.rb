@@ -32,8 +32,8 @@ class RepositoryBookTest < Minitest::Test
     repository_book = GitShelf::RepositoryBook.load(config)
     repositories = repository_book.repositories
     assert_equal(2, repositories.size)
-    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo1", repositories.fetch(0).path)
-    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo2", repositories.fetch(1).path)
+    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo1", repositories.fetch(0).path.to_s)
+    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo2", repositories.fetch(1).path.to_s)
   end
 
   def test_load__without_cache_file
@@ -51,8 +51,8 @@ class RepositoryBookTest < Minitest::Test
     repository_book = GitShelf::RepositoryBook.load(config)
     repositories = repository_book.repositories
     assert_equal(2, repositories.size)
-    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo1", repositories.fetch(0).path)
-    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo2", repositories.fetch(1).path)
+    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo1", repositories.fetch(0).path.to_s)
+    assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo2", repositories.fetch(1).path.to_s)
   end
 
   def test_save
@@ -60,7 +60,7 @@ class RepositoryBookTest < Minitest::Test
     GitShelf::RepositoryBook.new(repositories)
 
     assert_equal(2, repositories.size)
-    assert_equal('/root/ruby/github.com/mike/repo1', repositories.fetch(0).path)
-    assert_equal('/root/ruby/github.com/mike/repo2', repositories.fetch(1).path)
+    assert_equal('/root/ruby/github.com/mike/repo1', repositories.fetch(0).path.to_s)
+    assert_equal('/root/ruby/github.com/mike/repo2', repositories.fetch(1).path.to_s)
   end
 end

@@ -1,4 +1,5 @@
 require 'yaml'
+require 'pathname'
 
 module GitShelf
   class RepositoryBook
@@ -13,8 +14,8 @@ module GitShelf
     # @param config [Hash]
     # @return [self]
     def self.load(config)
-      book_path = File.expand_path(config[:repository_book])
-      if File.exist?(book_path)
+      book_path = Pathname.new(config[:repository_book]).expand_path
+      if book_path.exist?
         repository_book = YAML.load_file(book_path)
         repositories = GitShelf::Repositories.from_array(
             File.expand_path(config[:shelf]),

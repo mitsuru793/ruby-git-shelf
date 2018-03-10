@@ -5,6 +5,7 @@ require "thor"
 require 'yaml'
 require 'awesome_print'
 require 'shell'
+require 'pathname'
 
 require 'git_shelf'
 
@@ -16,8 +17,8 @@ class MyCLI < Thor
   def get(category, url)
     config = load_config
 
-    category_dir = File.expand_path(File.join(config[:shelf], category))
-    if !Dir.exist?(category_dir)
+    category_dir = Pathname.new(config[:shelf]).join(category).expand_path
+    if !category_dir.exist?
       puts "Directory does not exist: #{category_dir}."
       answer = ask('Do you make this directory and clone in it? [yes/no] ')
       unless answer.match('yes')
@@ -75,8 +76,7 @@ class MyCLI < Thor
 
   private
   def load_config
-    config_path = File.expand_path(options[:config_path] || '~/.git-shelf')
-    config_path = File.readlink(config_path) if File.symlink?(config_path)
+    config_path = Pathname.new(options[:config_path] || '~/.git-shelf').expand_path
     YAML.load_file(config_path)
   end
 

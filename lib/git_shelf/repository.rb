@@ -1,5 +1,6 @@
 require 'uri'
 require 'fileutils'
+require 'pathname'
 
 module GitShelf
   class Repository
@@ -23,7 +24,7 @@ module GitShelf
     # @return [Time, nil]
     attr_reader :cloned_at
 
-    # @return [String]
+    # @return [Pathname]
     attr_reader :path
 
     # @param root [String] git shelf root path
@@ -38,7 +39,7 @@ module GitShelf
       @host = host
       @url = sprintf('https://%s/%s/%s', host, author, name)
       @category = category
-      @path = File.expand_path(File.join(root, @category, @host, @author, @name))
+      @path = Pathname.new(root).join(@category, @host, @author, @name).expand_path
       @cloned_at = cloned_at
     end
 
@@ -69,7 +70,7 @@ module GitShelf
 
     # @return [void]
     def shallow_clone
-      raise StandardError.new("Already cloned: #{path}") if Dir.exist?(@path)
+      raise StandardError.new("Already cloned: #{@path}") if @path.exist?
       FileUtils.mkdir_p(@path)
       system('git', 'clone', '--depth=1', @url, @path)
     end

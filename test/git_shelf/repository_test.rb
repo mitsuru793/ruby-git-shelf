@@ -9,7 +9,7 @@ class RepositoryTest < Minitest::Test
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
     cloned_at = Time.now
     repository = GitShelf::Repository.from_url('/root', url, 'ruby', cloned_at)
-    assert_equal('/root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path)
+    assert_equal('/root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path.to_s)
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
@@ -22,7 +22,7 @@ class RepositoryTest < Minitest::Test
     git_dir = 'ruby/github.com/mitsuru793/ruby-git-shelf'
     path = @tmpDir.create_git_dir(git_dir)
     repository = GitShelf::Repository.from_path('/root', path)
-    assert_equal('/root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path)
+    assert_equal('/root/ruby/github.com/mitsuru793/ruby-git-shelf', repository.path.to_s)
     assert_equal('github.com', repository.host)
     assert_equal('mitsuru793', repository.author)
     assert_equal('ruby-git-shelf', repository.name)
