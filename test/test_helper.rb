@@ -21,7 +21,7 @@ class TmpDir
   def create_git_dir(dir)
     git_dir = FileUtils.mkdir_p("#{@root}/#{dir}")[0]
     Dir.mkdir("#{git_dir}/.git")
-    return git_dir
+    git_dir
   end
 
   # @param dirs [Array<String>] directory paths
@@ -35,7 +35,7 @@ class TmpDir
   def mkdir(path)
     joined_path = "#{@root}/#{path}"
     FileUtils.mkdir_p(joined_path)
-    return joined_path
+    joined_path
   end
 
   # @param path [String]
