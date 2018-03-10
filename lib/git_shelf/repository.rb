@@ -62,7 +62,7 @@ module GitShelf
       url = "https://#{host}/#{author}/#{name}"
       begin
         cloned_at = File::Stat.new(path).birthtime
-      rescue NotImplementedError => e
+      rescue NotImplementedError
         cloned_at = nil
       end
       self.from_url(root, url, category, cloned_at)
