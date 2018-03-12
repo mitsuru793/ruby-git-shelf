@@ -11,14 +11,14 @@ module GitShelf
       @repositories = repositories
     end
 
-    # @param config [Hash]
+    # @param config [Config::Base]
     # @return [self]
     def self.load(config)
-      book_path = Pathname.new(config[:repository_book]).expand_path
+      book_path = config.repository_book.path
       if book_path.exist?
         repository_book = YAML.load_file(book_path)
         repositories = GitShelf::Repositories.from_array(
-            File.expand_path(config[:shelf]),
+            config.shelf.path,
             repository_book[:repositories]
         )
       else

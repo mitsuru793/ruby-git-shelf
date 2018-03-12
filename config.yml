@@ -1,2 +1,4 @@
-:shelf: ~/git-shelf
-:repository_book: ~/git-shelf/repository_book.yml
+shelf:
+  path: ~/git-shelf
+repository_book:
+  path: ~/git-shelf/repository_book.yml

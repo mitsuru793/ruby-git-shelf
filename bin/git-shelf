@@ -76,8 +76,7 @@ class MyCLI < Thor
 
   private
   def load_config
-    config_path = Pathname.new(options[:config_path] || '~/.git-shelf').expand_path
-    YAML.load_file(config_path)
+    GitShelf::Config.load_file(options[:config_path] || '~/.git-shelf')
   end
 
   def ask(prompt = "", newline = false)
