@@ -36,7 +36,7 @@ class RepositoryBookTest < Minitest::Test
     assert_equal("#{@tmp.root}/git-shelf/ruby/github.com/mike/repo2", repositories.fetch(1).path.to_s)
   end
 
-  def test_load__without_cache_file
+  def test_load_without_cache_file
     config = {
         repository_book: "#{@tmp.root}/book.yml",
         shelf: "#{@tmp.root}/git-shelf/",
