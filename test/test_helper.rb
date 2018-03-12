@@ -16,6 +16,10 @@ class TmpDir
     @root = Dir.mktmpdir
   end
 
+  def to_s
+    @root
+  end
+
   # @param dir [String] directory path
   # @return [String]
   def create_git_dir(dir)

@@ -23,6 +23,10 @@ class RepositoriesTest < Minitest::Test
 
     assert_equal(@git_paths.size - 1, repositories.size)
     assert_all_item_instance_of(GitShelf::Repository, repositories)
+
+    assert_raises ArgumentError do
+      GitShelf::Repositories.from_root_path("#{@tmpDir}/missing")
+    end
   end
 
   def test_from_array

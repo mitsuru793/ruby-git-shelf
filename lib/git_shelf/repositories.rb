@@ -14,6 +14,8 @@ module GitShelf
     # @param root [String]
     # @return self
     def self.from_root_path(root)
+      raise ArgumentError, "No git-shelf exists: #{root}" unless Dir.exist?(root)
+
       repositories = []
       Find.find(root) {|path|
         next unless Dir.exist?(File.join(path, '.git'))
