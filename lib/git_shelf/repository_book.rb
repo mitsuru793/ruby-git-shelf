@@ -27,13 +27,13 @@ module GitShelf
       new(repositories)
     end
 
-    # @string path [String]
+    # @string path [Pathname]
     # @return [void]
     def save(path)
       data = {
           repositories: @repositories.to_a
       }
-      File.open(File.expand_path(path), 'w') do |f|
+      File.open(path, 'w') do |f|
         YAML.dump(data, f)
       end
     end
