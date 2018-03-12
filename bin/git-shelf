@@ -63,7 +63,7 @@ class MyCLI < Thor
   def dump
     config = load_config
     repository_book = GitShelf::RepositoryBook.load(config)
-    repository_book.save(config[:repository_book])
+    repository_book.save(config.repository_book.path)
   end
 
   desc "count CATEGORY", "Count CATEGORY of repositories from cached yml."

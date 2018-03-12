@@ -22,8 +22,7 @@ module GitShelf
             repository_book[:repositories]
         )
       else
-        config_path = File.expand_path(config[:shelf])
-        repositories = GitShelf::Repositories.from_root_path(config_path)
+        repositories = GitShelf::Repositories.from_root_path(config.shelf.path)
       end
       new(repositories)
     end
