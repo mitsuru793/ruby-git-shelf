@@ -22,12 +22,13 @@ class RepositoryBookTest < Minitest::Test
   end
 
   def test_load_cache_file
-    config = {
-        repository_book: "#{@tmp.root}/book.yml",
-        shelf: "#{@tmp.root}/git-shelf/",
-    }
+    config_path = @tmp.write_yaml('config.yml', {
+        'repository_book' => {'path' => "#{@tmp.root}/book.yml"},
+        'shelf' => {'path' => "#{@tmp.root}/git-shelf/"},
+    })
+    config = GitShelf::Config.load_file(config_path)
     @tmp.write_yaml('book.yml', {repositories: @repositories_data})
-    assert(File.exist?(config[:repository_book]))
+    assert(config.repository_book.path.exist?)
 
     repository_book = GitShelf::RepositoryBook.load(config)
     repositories = repository_book.repositories
@@ -37,11 +38,12 @@ class RepositoryBookTest < Minitest::Test
   end
 
   def test_load_without_cache_file
-    config = {
-        repository_book: "#{@tmp.root}/book.yml",
-        shelf: "#{@tmp.root}/git-shelf/",
-    }
-    assert(!File.exist?(config[:repository_book]))
+    config_path = @tmp.write_yaml('config.yml', {
+        'repository_book' => {'path' => "#{@tmp.root}/book.yml"},
+        'shelf' => {'path' => "#{@tmp.root}/git-shelf/"},
+    })
+    config = GitShelf::Config.load_file(config_path)
+    refute(config.repository_book.path.exist?)
 
     @tmp.create_git_dirs(%W{
       git-shelf/ruby/github.com/mike/repo1
