@@ -46,6 +46,7 @@ class RepositoryTest < Minitest::Test
 
     refute(hash.has_key?('path'))
     refute(hash.has_key?('root'))
+    assert_equal('github.com/mitsuru793/ruby-git-shelf', hash['id'])
     assert_equal('github.com', hash['host'])
     assert_equal('mitsuru793', hash['author'])
     assert_equal('ruby-git-shelf', hash['name'])

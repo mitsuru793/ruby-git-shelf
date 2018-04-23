@@ -39,12 +39,36 @@ class RepositoriesTest < Minitest::Test
     assert(repositories.any? {|r| r.name == 'name2'})
   end
 
+  def test_from_hash
+    repo1 = repository_hash
+    repo2 = repository_hash
+    repo1_id = sprintf('%s/%s/%s', repo1['host'], repo1['author'], repo1['name'])
+    repo2_id = sprintf('%s/%s/%s', repo2['host'], repo2['author'], repo2['name'])
+    data = {repo1_id => repo1, repo2_id => repo2}
+
+    repositories = GitShelf::Repositories.from_hash('root', data)
+    assert_instance_of(GitShelf::Repositories, repositories)
+
+    assert_equal(data.size, repositories.size)
+    assert(repositories.any? {|r| r.name == 'name1'})
+    assert(repositories.any? {|r| r.name == 'name2'})
+  end
+
   def test_to_a
     repositories = GitShelf::Repositories.from_root_path(@tmpDir.root)
     array = repositories.to_a
 
     assert_equal(@git_paths.size - 1, repositories.size)
     assert_all_item_instance_of(Hash, array)
+  end
+
+  def test_to_h
+    repositories = GitShelf::Repositories.from_root_path(@tmpDir.root)
+    hashSet = repositories.to_h
+
+    assert_equal(@git_paths.size - 1, repositories.size)
+    assert_all_item_instance_of(Hash, hashSet)
+    assert(hashSet.has_key?('github.com/mike/repo1'))
   end
 
   def test_from_count

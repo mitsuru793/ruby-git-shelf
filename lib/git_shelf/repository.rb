@@ -5,6 +5,9 @@ require 'pathname'
 module GitShelf
   class Repository
     # @return [String]
+    attr_reader :id
+
+    # @return [String]
     attr_reader :name
 
     # @return [String]
@@ -34,10 +37,11 @@ module GitShelf
     # @param category [String, nil]
     # @param cloned_at [Time]
     def initialize(root, name, author, host, category, cloned_at)
+      @id = sprintf('%s/%s/%s', host, author, name)
       @name = name
       @author = author
       @host = host
-      @url = sprintf('https://%s/%s/%s', host, author, name)
+      @url = sprintf('https://%s', @id)
       @category = category
       @path = Pathname.new(root).join(@category, @host, @author, @name).expand_path
       @cloned_at = cloned_at
@@ -78,6 +82,7 @@ module GitShelf
     # @return [Hash]
     def to_h
       {
+          'id' => @id,
           'url' => @url,
           'name' => @name,
           'author' => @author,

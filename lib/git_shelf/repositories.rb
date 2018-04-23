@@ -39,6 +39,19 @@ module GitShelf
       return new(repositories)
     end
 
+    # @param root [String] git shelf root path
+    # @param repositories_data [Hash<Hash>]
+    # @return self
+    def self.from_hash(root, repositories_data)
+      repositories = []
+      repositories_data.each_value do |repo|
+        repositories.push(GitShelf::Repository.new(
+            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['cloned_at']
+        ))
+      end
+      return new(repositories)
+    end
+
     def each
       @items.map {|item| yield item}
     end
@@ -46,6 +59,15 @@ module GitShelf
     # @return [Array<Hash>]
     def to_a
       @items.map {|repo| repo.to_h}
+    end
+
+    # @return [Hash<Hash>]
+    def to_h
+      items = {}
+      @items.each do |repo|
+        items[repo.id] = repo.to_h
+      end
+      items
     end
 
     # @param key [String] count key of repository

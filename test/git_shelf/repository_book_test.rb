@@ -3,22 +3,22 @@ require "test_helper"
 class RepositoryBookTest < Minitest::Test
   def setup
     @tmp = TmpDir.new
-    @repositories_data = [
-        {
+    @repositories_data = {
+        'github.com/mike/repo1' => {
             'url' => 'https://github.com/mike/repo1',
             'name' => 'repo1',
             'author' => 'mike',
             'host' => 'github.com',
             'category' => 'ruby',
         },
-        {
+        'github.com/mike/repo2' => {
             'url' => 'https://github.com/mike/repo2',
             'name' => 'repo2',
             'author' => 'mike',
             'host' => 'github.com',
             'category' => 'ruby',
         },
-    ]
+    }
   end
 
   def test_load_cache_file
@@ -58,7 +58,7 @@ class RepositoryBookTest < Minitest::Test
   end
 
   def test_save
-    repositories = GitShelf::Repositories.from_array('/root', @repositories_data)
+    repositories = GitShelf::Repositories.from_hash('/root', @repositories_data)
     GitShelf::RepositoryBook.new(repositories)
 
     assert_equal(2, repositories.size)

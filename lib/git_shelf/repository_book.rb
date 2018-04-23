@@ -17,7 +17,7 @@ module GitShelf
       book_path = config.repository_book.path
       if book_path.exist?
         repository_book = YAML.load_file(book_path)
-        repositories = GitShelf::Repositories.from_array(
+        repositories = GitShelf::Repositories.from_hash(
             config.shelf.path,
             repository_book['repositories']
         )
@@ -31,7 +31,7 @@ module GitShelf
     # @return [void]
     def save(path)
       data = {
-          'repositories' => @repositories.to_a
+          'repositories' => @repositories.to_h
       }
       File.open(path, 'w') do |f|
         YAML.dump(data, f)
