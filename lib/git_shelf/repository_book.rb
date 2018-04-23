@@ -19,7 +19,7 @@ module GitShelf
         repository_book = YAML.load_file(book_path)
         repositories = GitShelf::Repositories.from_array(
             config.shelf.path,
-            repository_book[:repositories]
+            repository_book['repositories']
         )
       else
         repositories = GitShelf::Repositories.from_root_path(config.shelf.path)
@@ -31,7 +31,7 @@ module GitShelf
     # @return [void]
     def save(path)
       data = {
-          repositories: @repositories.to_a
+          'repositories' => @repositories.to_a
       }
       File.open(path, 'w') do |f|
         YAML.dump(data, f)

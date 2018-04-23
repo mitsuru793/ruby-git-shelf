@@ -78,12 +78,12 @@ module GitShelf
     # @return [Hash]
     def to_h
       {
-          url: @url,
-          name: @name,
-          author: @author,
-          host: @host,
-          category: @category,
-          cloned_at: @cloned_at,
+          'url' => @url,
+          'name' => @name,
+          'author' => @author,
+          'host' => @host,
+          'category' => @category,
+          'cloned_at' => @cloned_at,
       }
     end
   end

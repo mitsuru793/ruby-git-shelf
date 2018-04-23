@@ -44,14 +44,14 @@ class RepositoryTest < Minitest::Test
     repository = GitShelf::Repository.from_path('root', path)
     hash = repository.to_h
 
-    refute(hash.has_key?(:path))
-    refute(hash.has_key?(:root))
-    assert_equal('github.com', hash[:host])
-    assert_equal('mitsuru793', hash[:author])
-    assert_equal('ruby-git-shelf', hash[:name])
-    assert_equal('https://github.com/mitsuru793/ruby-git-shelf', hash[:url])
-    assert_equal('ruby', hash[:category])
-    assert_equal_birthtime(path, hash[:cloned_at])
+    refute(hash.has_key?('path'))
+    refute(hash.has_key?('root'))
+    assert_equal('github.com', hash['host'])
+    assert_equal('mitsuru793', hash['author'])
+    assert_equal('ruby-git-shelf', hash['name'])
+    assert_equal('https://github.com/mitsuru793/ruby-git-shelf', hash['url'])
+    assert_equal('ruby', hash['category'])
+    assert_equal_birthtime(path, hash['cloned_at'])
   end
 
   private

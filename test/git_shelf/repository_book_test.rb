@@ -5,18 +5,18 @@ class RepositoryBookTest < Minitest::Test
     @tmp = TmpDir.new
     @repositories_data = [
         {
-            url: 'https://github.com/mike/repo1',
-            name: 'repo1',
-            author: 'mike',
-            host: 'github.com',
-            category: 'ruby',
+            'url' => 'https://github.com/mike/repo1',
+            'name' => 'repo1',
+            'author' => 'mike',
+            'host' => 'github.com',
+            'category' => 'ruby',
         },
         {
-            url: 'https://github.com/mike/repo2',
-            name: 'repo2',
-            author: 'mike',
-            host: 'github.com',
-            category: 'ruby',
+            'url' => 'https://github.com/mike/repo2',
+            'name' => 'repo2',
+            'author' => 'mike',
+            'host' => 'github.com',
+            'category' => 'ruby',
         },
     ]
   end
@@ -27,7 +27,7 @@ class RepositoryBookTest < Minitest::Test
         'shelf' => {'path' => "#{@tmp.root}/git-shelf/"},
     })
     config = GitShelf::Config.load_file(config_path)
-    @tmp.write_yaml('book.yml', {repositories: @repositories_data})
+    @tmp.write_yaml('book.yml', {'repositories' => @repositories_data})
     assert(config.repository_book.path.exist?)
 
     repository_book = GitShelf::RepositoryBook.load(config)

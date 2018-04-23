@@ -49,9 +49,9 @@ class RepositoriesTest < Minitest::Test
 
   def test_from_count
     data = [
-        repository_hash(category: 'ruby'),
-        repository_hash(category: 'ruby'),
-        repository_hash(category: 'php'),
+        repository_hash('category' => 'ruby'),
+        repository_hash('category' => 'ruby'),
+        repository_hash('category' => 'php'),
     ]
     repositories = GitShelf::Repositories.from_array('root', data)
     counter = repositories.count('category')
@@ -73,11 +73,11 @@ class RepositoriesTest < Minitest::Test
 
     i = @dummy_repository_count
     {
-        name: override[:name] || "name#{i}",
-        author: override[:author] || "author#{i}",
-        host: override[:host] || "host#{i}",
-        category: override[:category] || "category#{i}",
-        cloned_at: override[:cloned_at] || Time.now,
+        'name' => override['name'] || "name#{i}",
+        'author' => override['author'] || "author#{i}",
+        'host' => override['host'] || "host#{i}",
+        'category' => override['category'] || "category#{i}",
+        'cloned_at' => override['cloned_at'] || Time.now,
     }
   end
 end
