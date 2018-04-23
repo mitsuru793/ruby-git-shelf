@@ -29,6 +29,7 @@ Commands:
   git-shelf get CATEGORY URL  # Get a repository from URL and put it into CATEGORY directory.
   git-shelf help [COMMAND]    # Describe available commands or one specific command
   git-shelf list [CATEGORY]   # list repository paths each category
+  git-shelf restore           # Clone repositories from a cached yaml.
 ```
 
 ### Clone repository

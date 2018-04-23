@@ -36,6 +36,8 @@ class RepositoryTest < Minitest::Test
     url = 'https://github.com/mitsuru793/ruby-git-shelf'
     repository = GitShelf::Repository.from_url('root', url, 'ruby', Time.now)
     repository.shallow_clone
+
+    # TODO will fail if can_clone is false
   end
 
   def test_to_h
@@ -52,6 +54,7 @@ class RepositoryTest < Minitest::Test
     assert_equal('ruby-git-shelf', hash['name'])
     assert_equal('https://github.com/mitsuru793/ruby-git-shelf', hash['url'])
     assert_equal('ruby', hash['category'])
+    assert_equal(true, hash['can_clone'])
     assert_equal_birthtime(path, hash['cloned_at'])
   end
 

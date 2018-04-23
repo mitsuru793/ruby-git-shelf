@@ -22,6 +22,9 @@ module GitShelf
     # @return [String, nil]
     attr_reader :category
 
+    # @return [Boolean]
+    attr_reader :can_clone
+
     # Linux doesn't implement birthtime. It's needed when dump from existed repositories.
     # So, allow nil.
     # @return [Time, nil]
@@ -35,8 +38,9 @@ module GitShelf
     # @param author [String] repository author
     # @param host [String] domain has repository
     # @param category [String, nil]
+    # @param can_clone [Boolean]
     # @param cloned_at [Time]
-    def initialize(root, name, author, host, category, cloned_at)
+    def initialize(root, name, author, host, category, can_clone, cloned_at)
       @id = sprintf('%s/%s/%s', host, author, name)
       @name = name
       @author = author
@@ -44,6 +48,7 @@ module GitShelf
       @url = sprintf('https://%s', @id)
       @category = category
       @path = Pathname.new(root).join(@category, @host, @author, @name).expand_path
+      @can_clone = can_clone
       @cloned_at = cloned_at
     end
 
@@ -55,7 +60,7 @@ module GitShelf
     def self.from_url(root, url, category, cloned_at)
       uri = URI.parse(url)
       (author, name) = uri.path.sub(/^\//, '').split('/')
-      new(root, name, author, uri.host, category, cloned_at)
+      new(root, name, author, uri.host, category, true, cloned_at)
     end
 
     # @param root [String] git shelf root path
@@ -75,6 +80,7 @@ module GitShelf
     # @return [void]
     def shallow_clone
       raise StandardError.new("Already cloned: #{@path}") if @path.exist?
+      raise StandardError.new("Cannot clone: #{@path}") unless @can_clone
       FileUtils.mkdir_p(@path)
       system('git', 'clone', '--depth=1', @url, @path.to_s)
     end
@@ -88,6 +94,7 @@ module GitShelf
           'author' => @author,
           'host' => @host,
           'category' => @category,
+          'can_clone' => @can_clone,
           'cloned_at' => @cloned_at,
       }
     end

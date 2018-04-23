@@ -33,7 +33,7 @@ module GitShelf
       repositories = []
       repositories_data.each do |repo|
         repositories.push(GitShelf::Repository.new(
-            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['cloned_at']
+            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['can_clone'], repo['cloned_at']
         ))
       end
       return new(repositories)
@@ -46,7 +46,7 @@ module GitShelf
       repositories = []
       repositories_data.each_value do |repo|
         repositories.push(GitShelf::Repository.new(
-            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['cloned_at']
+            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['can_clone'], repo['cloned_at']
         ))
       end
       return new(repositories)
