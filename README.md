@@ -23,7 +23,8 @@ Or install it yourself as:
 ```
 $ bin/git-shelf
 Commands:
-  git-shelf count CATEGORY    # Count CATEGORY of repositories from cached yml.
+  git-shelf count CATEGORY    # Count CATEGORY of repositories from cached yml. CATEGORY is listed on countable command.
+  git-shelf countable         # List countable category of repositories from cached yml. You can use it on count command.
   git-shelf dump              # Dump repositories directory tree as a yaml.
   git-shelf get CATEGORY URL  # Get a repository from URL and put it into CATEGORY directory.
   git-shelf help [COMMAND]    # Describe available commands or one specific command
