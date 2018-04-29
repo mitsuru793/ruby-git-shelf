@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "git_shelf"
   spec.version       = GitShelf::VERSION
   spec.authors       = ["mitsuru793"]
-  spec.email         = ["mitsuru793"]
+  spec.email         = ["mitsuru793@gmail.com"]
 
   spec.summary       = %q{Git repository manager for code reading.}
   spec.description   = %q{Git repository manager for code reading.}
