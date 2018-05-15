@@ -7,6 +7,7 @@ gemspec
 
 gem "thor", "~> 0.20.0"
 gem "terminal-table", "~> 1.8"
+gem "dry-struct", "~> 0.5.0"
 
 group :development do
   gem "awesome_print", "~> 1.8"
