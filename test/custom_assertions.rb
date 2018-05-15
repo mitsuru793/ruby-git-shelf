@@ -20,4 +20,8 @@ module Minitest::Assertions
     path = actual.expand_path.to_s
     assert(File.exist?(path), 'No exists: ' + path)
   end
+
+  def assert_count(expected, actual)
+    assert_equal(expected.size, actual, "Size must be #{expected}, but #{actual}.")
+  end
 end
