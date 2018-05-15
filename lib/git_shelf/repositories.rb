@@ -27,19 +27,6 @@ module GitShelf
     end
 
     # @param root [String] git shelf root path
-    # @param repositories_data [Array<Hash>]
-    # @return self
-    def self.from_array(root, repositories_data)
-      repositories = []
-      repositories_data.each do |repo|
-        repositories.push(GitShelf::Repository.new(
-            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['can_clone'], repo['cloned_at']
-        ))
-      end
-      return new(repositories)
-    end
-
-    # @param root [String] git shelf root path
     # @param repositories_data [Hash<Hash>]
     # @return self
     def self.from_hash(root, repositories_data)

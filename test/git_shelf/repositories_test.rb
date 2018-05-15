@@ -29,16 +29,6 @@ class RepositoriesTest < Minitest::Test
     end
   end
 
-  def test_from_array
-    data = [repository_hash, repository_hash]
-    repositories = GitShelf::Repositories.from_array('root', data)
-    assert_instance_of(GitShelf::Repositories, repositories)
-
-    assert_equal(data.size, repositories.size)
-    assert(repositories.any? {|r| r.name == 'name1'})
-    assert(repositories.any? {|r| r.name == 'name2'})
-  end
-
   def test_from_hash
     repo1 = repository_hash
     repo2 = repository_hash
