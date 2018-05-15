@@ -6,6 +6,14 @@ require 'pathname'
 # 3rd party
 require "thor"
 require 'awesome_print'
+require 'dry-struct'
+
+module GitShelf
+  module Types
+    include Dry::Types.module
+    Pathname = Types.Instance(Pathname)
+  end
+end
 
 require "git_shelf/version"
 require "git_shelf/repository"
