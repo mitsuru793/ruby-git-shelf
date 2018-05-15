@@ -11,6 +11,17 @@ require "awesome_print"
 require "git_shelf"
 require "custom_assertions"
 
+
+module GitShelf
+  class Git
+    class << self
+      def clone(src, dest, options)
+        FileUtils.mkdir_p(File.join(dest, '.git'))
+      end
+    end
+  end
+end
+
 class TmpDir
   # @param [String]
   attr_reader :root
@@ -101,6 +112,7 @@ class GitShelfUnitTest < Minitest::Test
   private
   def run_command(args)
     args.push('--config-path', @config_path)
+
     Time.stub :now, @now do
       GitShelf::Cli.start(args, debug: true)
     end

@@ -82,7 +82,7 @@ module GitShelf
       raise StandardError.new("Already cloned: #{@path}") if @path.exist?
       raise StandardError.new("Cannot clone: #{@path}") unless @can_clone
       FileUtils.mkdir_p(@path)
-      system('git', 'clone', '--depth=1', @url, @path.to_s)
+      GitShelf::Git.clone(@url, @path.to_s, ['--depth=1'])
     end
 
     # @return [Hash]
