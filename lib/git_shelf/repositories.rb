@@ -32,9 +32,7 @@ module GitShelf
     def self.from_hash(root, repositories_data)
       repositories = []
       repositories_data.each_value do |repo|
-        repositories.push(GitShelf::Repository.new(
-            root, repo['name'], repo['author'], repo['host'], repo['category'], repo['can_clone'], repo['cloned_at']
-        ))
+        repositories.push(GitShelf::Repository.new(repo))
       end
       return new(repositories)
     end

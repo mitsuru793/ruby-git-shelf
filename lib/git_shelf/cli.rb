@@ -29,7 +29,7 @@ module GitShelf
     end
 
     desc "list [CATEGORY]", "list repository paths each category"
-    option :base_path, type: :boolean, default: true
+    option :absolute_path, type: :boolean
 
     def list(category = nil)
       config = load_config
@@ -39,11 +39,10 @@ module GitShelf
 
       items = category.nil? ? repositories : repositories.select {|r| r.category == category}
       puts items.map {|r|
-        if options[:base_path]
+        if options[:absolute_path]
           r.path
         else
-          # plus 1 to delete first slash /
-          r.path.slice(config[:shelf].length + 1..-1)
+          r.path.relative_path_from(config.shelf.path)
         end
       }.join("\n")
     end
