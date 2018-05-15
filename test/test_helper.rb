@@ -1,9 +1,12 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
-require "minitest/autorun"
-require "awesome_print"
+# stdlib
 require 'fileutils'
 require 'yaml'
+
+# 3rd party
+require "minitest/autorun"
+require "awesome_print"
 
 require "git_shelf"
 require "custom_assertions"
@@ -66,6 +69,51 @@ class TmpDir
       YAML.dump(data, f)
     end
     joined_path
+  end
+end
+
+class GitShelfUnitTest < Minitest::Test
+  def setup
+    tmp_root = File.expand_path('../../tmp', __FILE__)
+
+    @now = Time.new
+    @config = {
+        'shelf' => {
+            'path' => tmp_root
+        },
+        'repository_book' => {
+            'path' => tmp_root + '/repository_book.yml',
+        }
+    }
+    FileUtils.mkdir_p(tmp_root.to_s)
+
+    @config_path = File.join(tmp_root, '.git-shelf')
+    File.open(@config_path, 'w') do |f|
+      YAML.dump(@config, f)
+    end
+  end
+
+  def teardown
+    FileUtils.rm_r(@config['shelf']['path']) if File.exist?(@config['shelf']['path'])
+    File.delete(@config_path) if File.exist?(@config_path)
+  end
+
+  private
+  def run_command(args)
+    args.push('--config-path', @config_path)
+    Time.stub :now, @now do
+      GitShelf::Cli.start(args, debug: true)
+    end
+    YAML.load_file(File.expand_path(@config['repository_book']['path']))
+  end
+
+  def capture
+    old_stdout = $stdout
+    $stdout = StringIO.new
+    yield
+    $stdout.string
+  ensure
+    $stdout = old_stdout
   end
 end
 
