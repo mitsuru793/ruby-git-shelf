@@ -116,7 +116,6 @@ class GitShelfUnitTest < Minitest::Test
     Time.stub :now, @now do
       GitShelf::Cli.start(args, debug: true)
     end
-    YAML.load_file(File.expand_path(@config['repository_book']['path']))
   end
 
   def capture
