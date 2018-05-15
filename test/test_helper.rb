@@ -85,20 +85,20 @@ end
 
 class GitShelfUnitTest < Minitest::Test
   def setup
-    tmp = TmpDir.new
+    @tmpDir = TmpDir.new
 
     @now = Time.new
     @config = {
         'shelf' => {
-            'path' => tmp.root
+            'path' => @tmpDir.root
         },
         'repository_book' => {
-            'path' => tmp.root + '/repository_book.yml',
+            'path' => @tmpDir.root + '/repository_book.yml',
         }
     }
-    FileUtils.mkdir_p(tmp.root.to_s)
+    FileUtils.mkdir_p(@tmpDir.root.to_s)
 
-    @config_path = File.join(tmp.root, '.git-shelf')
+    @config_path = File.join(@tmpDir.root, '.git-shelf')
     File.open(@config_path, 'w') do |f|
       YAML.dump(@config, f)
     end
