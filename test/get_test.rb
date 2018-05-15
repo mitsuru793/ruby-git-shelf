@@ -14,12 +14,12 @@ class GetTest < GitShelfUnitTest
     assert_count(repos, 1)
 
     repo = repos['github.com/mitsuru793/ruby-git-shelf']
-    assert_equal(repo['id'], 'github.com/mitsuru793/ruby-git-shelf')
-    assert_equal(repo['url'], 'https://github.com/mitsuru793/ruby-git-shelf')
-    assert_equal(repo['name'], 'ruby-git-shelf')
-    assert_equal(repo['author'], 'mitsuru793')
-    assert_equal(repo['category'], 'ruby')
-    assert(repo['can_clone'])
-    assert_equal(repo['cloned_at'].to_s, @now.to_s)
+    assert_equal(repo[:id], 'github.com/mitsuru793/ruby-git-shelf')
+    assert_equal(repo[:url], 'https://github.com/mitsuru793/ruby-git-shelf')
+    assert_equal(repo[:name], 'ruby-git-shelf')
+    assert_equal(repo[:author], 'mitsuru793')
+    assert_equal(repo[:category], 'ruby')
+    assert(repo[:can_clone])
+    assert_equal(repo[:cloned_at].to_s, @now.to_s)
   end
 end

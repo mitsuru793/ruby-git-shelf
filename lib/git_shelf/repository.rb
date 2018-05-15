@@ -3,54 +3,26 @@ require 'fileutils'
 require 'pathname'
 
 module GitShelf
-  class Repository
-    # @return [String]
-    attr_reader :id
+  class Repository < Dry::Struct
+    attribute :id, Types::Strict::String
 
-    # @return [String]
-    attr_reader :name
+    attribute :name, Types::Strict::String
 
-    # @return [String]
-    attr_reader :author
+    attribute :author, Types::Strict::String
 
-    # @return [String]
-    attr_reader :host
+    attribute :host, Types::Strict::String
 
-    # @return [String]
-    attr_reader :url
+    attribute :url, Types::Strict::String
 
-    # @return [String, nil]
-    attr_reader :category
+    attribute :category, Types::Strict::String.optional
 
-    # @return [Boolean]
-    attr_reader :can_clone
+    attribute :can_clone, Types::Strict::Bool
 
     # Linux doesn't implement birthtime. It's needed when dump from existed repositories.
     # So, allow nil.
-    # @return [Time, nil]
-    attr_reader :cloned_at
+    attribute :cloned_at, Types::Strict::Time.optional
 
-    # @return [Pathname]
-    attr_reader :path
-
-    # @param root [String] git shelf root path
-    # @param name [String] repository name
-    # @param author [String] repository author
-    # @param host [String] domain has repository
-    # @param category [String, nil]
-    # @param can_clone [Boolean]
-    # @param cloned_at [Time]
-    def initialize(root, name, author, host, category, can_clone, cloned_at)
-      @id = sprintf('%s/%s/%s', host, author, name)
-      @name = name
-      @author = author
-      @host = host
-      @url = sprintf('https://%s', @id)
-      @category = category
-      @path = Pathname.new(root).join(@category, @host, @author, @name).expand_path
-      @can_clone = can_clone
-      @cloned_at = cloned_at
-    end
+    attribute :path, Types::Pathname.constructor {|path| Pathname.new(path)}
 
     # @param root [String] git shelf root path
     # @param url [String] ex: 'https://github.com/mitsuru793/ruby-git-shelf'
@@ -60,7 +32,10 @@ module GitShelf
     def self.from_url(root, url, category, cloned_at)
       uri = URI.parse(url)
       (author, name) = uri.path.sub(/^\//, '').split('/')
-      new(root, name, author, uri.host, category, true, cloned_at)
+      id = sprintf('%s/%s/%s', uri.host, author, name)
+      url = sprintf('https://%s', id)
+      path = Pathname.new(root).join(category, uri.host, author, name).expand_path
+      new(id: id, url: url, name: name, author: author, path: path, host: uri.host, category: category, can_clone: true, cloned_at: cloned_at)
     end
 
     # @param root [String] git shelf root path
@@ -74,29 +49,16 @@ module GitShelf
       rescue NotImplementedError
         cloned_at = nil
       end
+
       self.from_url(root, url, category, cloned_at)
     end
 
     # @return [void]
     def shallow_clone
-      raise StandardError.new("Already cloned: #{@path}") if @path.exist?
-      raise StandardError.new("Cannot clone: #{@path}") unless @can_clone
-      FileUtils.mkdir_p(@path)
-      GitShelf::Git.clone(@url, @path.to_s, ['--depth=1'])
-    end
-
-    # @return [Hash]
-    def to_h
-      {
-          'id' => @id,
-          'url' => @url,
-          'name' => @name,
-          'author' => @author,
-          'host' => @host,
-          'category' => @category,
-          'can_clone' => @can_clone,
-          'cloned_at' => @cloned_at,
-      }
+      raise StandardError.new("Already cloned: #{path}") if path.exist?
+      raise StandardError.new("Cannot clone: #{path}") unless can_clone
+      FileUtils.mkdir_p(path)
+      GitShelf::Git.clone(url, path.to_s, ['--depth=1'])
     end
   end
 end
