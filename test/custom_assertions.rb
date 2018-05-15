@@ -12,4 +12,12 @@ module Minitest::Assertions
       end
     end
   end
+
+  def assert_exists(actual)
+    unless (actual.is_a?(Pathname))
+      actual = Pathname.new(actual)
+    end
+    path = actual.expand_path.to_s
+    assert(File.exist?(path), 'No exists: ' + path)
+  end
 end
