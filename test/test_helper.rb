@@ -126,5 +126,46 @@ class GitShelfUnitTest < Minitest::Test
   ensure
     $stdout = old_stdout
   end
+
+  # fixture
+  def book
+    {
+        'repositories' => {
+            'ruby/github.com/mike/repo1' => {
+                id: 'ruby/github.com/mike/repo1',
+                name: 'repo1',
+                author: 'mike',
+                host: 'github.com',
+                url: 'https://github.com/mike/repo1',
+                category: 'ruby',
+                can_clone: true,
+                cloned_at: @now,
+                path: File.join(@tmpDir.root, 'ruby/github.com/mike/repo1')
+            },
+            'ruby/github.com/mike/repo2' => {
+                id: 'ruby/github.com/mike/repo2',
+                name: 'repo2',
+                author: 'mike',
+                host: 'github.com',
+                url: 'https://github.com/mike/repo2',
+                category: 'ruby',
+                can_clone: true,
+                cloned_at: @now,
+                path: File.join(@tmpDir.root, 'ruby/github.com/mike/repo2')
+            },
+            'php/github.com/jane/repo3' => {
+                id: 'php/github.com/jane/repo3',
+                name: 'repo3',
+                author: 'jane',
+                host: 'github.com',
+                url: 'https://github.com/jane/repo3',
+                category: 'php',
+                can_clone: true,
+                cloned_at: @now,
+                path: File.join(@tmpDir.root, 'php/github.com/jane/repo3')
+            },
+        },
+    }
+  end
 end
 
