@@ -84,9 +84,7 @@ module GitShelf
     desc "countable", "List countable category of repositories from cached yml. You can use it on count command."
 
     def countable
-      config = load_config
-      repository_book = GitShelf::RepositoryBook.load(config)
-      puts repository_book.repositories.first.to_h.keys
+      puts GitShelf::Repository.schema.keys
     end
 
     private
