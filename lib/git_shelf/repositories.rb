@@ -60,7 +60,7 @@ module GitShelf
     def count(key)
       counter = GitShelf::Counter.new(key)
       @items.each do |repo|
-        counter.succ!(repo.instance_variable_get("@#{key}"))
+        counter.succ!(repo.send(key))
       end
       counter
     end
