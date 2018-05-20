@@ -82,7 +82,6 @@ class TmpDir
     joined_path
   end
 end
-
 class GitShelfUnitTest < Minitest::Test
   def setup
     @tmpDir = TmpDir.new
@@ -131,19 +130,18 @@ class GitShelfUnitTest < Minitest::Test
   def book
     {
         'repositories' => {
-            'ruby/github.com/mike/repo1' => {
-                id: 'ruby/github.com/mike/repo1',
+            'github.com/jane/repo1' => {
+                id: 'github.com/jane/repo1',
                 name: 'repo1',
-                author: 'mike',
+                author: 'jane',
                 host: 'github.com',
-                url: 'https://github.com/mike/repo1',
-                category: 'ruby',
+                url: 'https://github.com/jane/repo1',
+                category: 'php',
                 can_clone: true,
-                cloned_at: @now,
-                path: File.join(@tmpDir.root, 'ruby/github.com/mike/repo1')
+                cloned_at: @now
             },
-            'ruby/github.com/mike/repo2' => {
-                id: 'ruby/github.com/mike/repo2',
+            'github.com/mike/repo2' => {
+                id: 'github.com/mike/repo2',
                 name: 'repo2',
                 author: 'mike',
                 host: 'github.com',
@@ -151,18 +149,16 @@ class GitShelfUnitTest < Minitest::Test
                 category: 'ruby',
                 can_clone: true,
                 cloned_at: @now,
-                path: File.join(@tmpDir.root, 'ruby/github.com/mike/repo2')
             },
-            'php/github.com/jane/repo3' => {
-                id: 'php/github.com/jane/repo3',
+            'github.com/mike/repo3' => {
+                id: 'github.com/mike/repo3',
                 name: 'repo3',
-                author: 'jane',
+                author: 'mike',
                 host: 'github.com',
-                url: 'https://github.com/jane/repo3',
-                category: 'php',
+                url: 'https://github.com/mike/repo3',
+                category: 'ruby',
                 can_clone: true,
                 cloned_at: @now,
-                path: File.join(@tmpDir.root, 'php/github.com/jane/repo3')
             },
         },
     }

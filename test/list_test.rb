@@ -20,9 +20,9 @@ class ListTest < GitShelfUnitTest
   def test_list_repositories_of_all_category
     output = capture {run_command(%w[list])}
     expected = <<~EOF
-      ruby/github.com/mike/repo1
+      php/github.com/jane/repo1
       ruby/github.com/mike/repo2
-      php/github.com/jane/repo3
+      ruby/github.com/mike/repo3
     EOF
     assert_equal(expected, output)
   end
@@ -30,8 +30,8 @@ class ListTest < GitShelfUnitTest
   def test_list_repositories_of_one_category
     output = capture {run_command(%w[list ruby])}
     expected = <<~EOF
-      ruby/github.com/mike/repo1
       ruby/github.com/mike/repo2
+      ruby/github.com/mike/repo3
     EOF
     assert_equal(expected, output)
   end
@@ -45,9 +45,9 @@ class ListTest < GitShelfUnitTest
     output = capture {run_command(%w[list --absolute-path])}
     root = @tmpDir.root.chomp('/')
     expected = <<~EOF
-      #{root}/ruby/github.com/mike/repo1
+      #{root}/php/github.com/jane/repo1
       #{root}/ruby/github.com/mike/repo2
-      #{root}/php/github.com/jane/repo3
+      #{root}/ruby/github.com/mike/repo3
     EOF
     assert_equal(expected, output)
   end
