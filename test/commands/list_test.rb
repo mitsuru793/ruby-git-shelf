@@ -51,4 +51,23 @@ class ListTest < GitShelfUnitTest
     EOF
     assert_equal(expected, output)
   end
+
+  def test_list_all_repositories_considering_clonable
+    cache = book
+    cache['repositories']['github.com/mike/repo3'][:can_clone] = false
+    @tmpDir.write_yaml('repository_book.yml', cache)
+
+    output = capture {run_command(%w[list --clonable])}
+    expected = <<~EOF
+      php/github.com/jane/repo1
+      ruby/github.com/mike/repo2
+    EOF
+    assert_equal(expected, output)
+
+    output = capture {run_command(%w[list --unclonable])}
+    expected = <<~EOF
+      ruby/github.com/mike/repo3
+    EOF
+    assert_equal(expected, output)
+  end
 end
