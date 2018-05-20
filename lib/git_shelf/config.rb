@@ -7,6 +7,10 @@ module GitShelf::Config
   # @return [Config::Base]
   def self.load_file(path)
     config_path = Pathname.new(path).expand_path
+    if config_path.symlink?
+      config_path = config_path.readlink.expand_path
+    end
+
     config = YAML.load_file(config_path)
     GitShelf::Config::Base.new(
         GitShelf::Config::Shelf.new(config['shelf']['path']),
