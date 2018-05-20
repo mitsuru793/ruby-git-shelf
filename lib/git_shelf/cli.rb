@@ -24,11 +24,7 @@ module GitShelf
 
     register(GitShelf::Commands::Count, 'count', 'count CATEGORY', 'Count CATEGORY of repositories from cached yml. CATEGORY is listed on countable command.')
 
-    desc "countable", "List countable category of repositories from cached yml. You can use it on count command."
-
-    def countable
-      puts GitShelf::Repository.schema.keys
-    end
+    register(GitShelf::Commands::Countable, 'countable', 'countable', 'List countable category of repositories from cached yml. You can use it on count command.')
 
     private
     def load_config

@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative '../test_helper'
 
 class CountableTest < GitShelfUnitTest
   def test_list_countable_categories
@@ -12,7 +12,6 @@ class CountableTest < GitShelfUnitTest
     category
     can_clone
     cloned_at
-    path
     EOF
     assert_equal(expected, output)
   end
