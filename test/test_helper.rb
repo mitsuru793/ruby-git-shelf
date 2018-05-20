@@ -82,6 +82,7 @@ class TmpDir
     joined_path
   end
 end
+
 class GitShelfUnitTest < Minitest::Test
   def setup
     @tmpDir = TmpDir.new
