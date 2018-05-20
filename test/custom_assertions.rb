@@ -18,7 +18,15 @@ module Minitest::Assertions
       actual = Pathname.new(actual)
     end
     path = actual.expand_path.to_s
-    assert(File.exist?(path), 'No exists: ' + path)
+    assert(File.exist?(path), 'Must exist: ' + path)
+  end
+
+  def refute_exists(actual)
+    unless (actual.is_a?(Pathname))
+      actual = Pathname.new(actual)
+    end
+    path = actual.expand_path.to_s
+    refute(File.exist?(path), 'Must not exist: ' + path)
   end
 
   def assert_count(expected, actual)
