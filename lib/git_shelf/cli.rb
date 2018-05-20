@@ -4,24 +4,7 @@ module GitShelf
 
     register(GitShelf::Commands::Get, 'get', 'get CATEGORY URL', 'Get a repository from URL and put it into CATEGORY directory.')
 
-    desc "list [CATEGORY]", "list repository paths each category"
-    option :absolute_path, type: :boolean
-
-    def list(category = nil)
-      config = load_config
-
-      repository_book = GitShelf::RepositoryBook.load(config)
-      repositories = repository_book.repositories
-
-      items = category.nil? ? repositories : repositories.select {|r| r.category == category}
-      puts items.map {|r|
-        if options[:absolute_path]
-          r.path(config.shelf.path).expand_path
-        else
-          r.path
-        end
-      }.join("\n")
-    end
+    register(GitShelf::Commands::List, 'list', 'list [CATEGORY]', 'list repository paths each category')
 
     desc "dump", "Dump repositories directory tree as a yaml."
 
