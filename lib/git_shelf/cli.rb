@@ -6,13 +6,7 @@ module GitShelf
 
     register(GitShelf::Commands::List, 'list', 'list [CATEGORY]', 'list repository paths each category')
 
-    desc "dump", "Dump repositories directory tree as a yaml."
-
-    def dump
-      config = load_config
-      repository_book = GitShelf::RepositoryBook.load(config)
-      repository_book.save(config.repository_book.path)
-    end
+    register(GitShelf::Commands::Dump, 'dump', 'dump', 'Dump repositories directory tree as a yaml.')
 
     desc "restore", "Clone repositories from a cached yaml."
 
