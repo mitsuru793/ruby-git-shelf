@@ -22,17 +22,7 @@ module GitShelf
       end
     end
 
-    desc "count CATEGORY", "Count CATEGORY of repositories from cached yml. CATEGORY is listed on countable command."
-
-    def count(category)
-      config = load_config
-      repository_book = GitShelf::RepositoryBook.load(config)
-      unless GitShelf::Repository.instance_methods(false).include?(category.to_sym)
-        puts "Invalid category: #{category}"
-        return;
-      end
-      puts repository_book.repositories.count(category).to_table
-    end
+    register(GitShelf::Commands::Count, 'count', 'count CATEGORY', 'Count CATEGORY of repositories from cached yml. CATEGORY is listed on countable command.')
 
     desc "countable", "List countable category of repositories from cached yml. You can use it on count command."
 
