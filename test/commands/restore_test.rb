@@ -13,4 +13,17 @@ class RestoreTest < GitShelfUnitTest
     assert_exists("#{root}/ruby/github.com/mike/repo2")
     refute_exists("#{root}/ruby/github.com/mike/repo3")
   end
+
+  def test_error_when_no_cache
+    book = Pathname.new(@config['repository_book']['path'])
+    book.delete if book.exist?
+
+    output = capture { run_command(%w[restore]) }
+    assert_equal("No cache file: #{book}", output.chomp)
+
+    root = @config['shelf']['path']
+    refute_exists("#{root}/php/github.com/jane/repo1")
+    refute_exists("#{root}/ruby/github.com/mike/repo2")
+    refute_exists("#{root}/ruby/github.com/mike/repo3")
+  end
 end
