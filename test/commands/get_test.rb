@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative '../test_helper'
 
 class GetTest < GitShelfUnitTest
   def test_save_with_category

@@ -2,31 +2,7 @@ module GitShelf
   class Cli < Thor
     class_option :config_path, type: :string
 
-    desc "get CATEGORY URL", "Get a repository from URL and put it into CATEGORY directory."
-
-    def get(category, url)
-      config = load_config
-
-      category_dir = config.shelf.path.join(category)
-      if !category_dir.exist?
-        puts "Directory does not exist: #{category_dir}."
-        answer = ask('Do you make this directory and clone in it? [yes/no] ')
-        unless answer.match('yes')
-          puts 'Cancel to clone a repository.'
-          return
-        end
-      end
-
-      repository = GitShelf::Repository.from_url(url, category, Time.now)
-      begin
-        repository.shallow_clone(config.shelf.path)
-      rescue StandardError => ex
-        puts ex
-      end
-
-      repository_book = GitShelf::RepositoryBook.load(config)
-      repository_book.save(config.repository_book.path)
-    end
+    register(GitShelf::Commands::Get, 'get', 'get CATEGORY URL', 'Get a repository from URL and put it into CATEGORY directory.')
 
     desc "list [CATEGORY]", "list repository paths each category"
     option :absolute_path, type: :boolean
