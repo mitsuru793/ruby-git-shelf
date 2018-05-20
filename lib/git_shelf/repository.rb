@@ -22,20 +22,17 @@ module GitShelf
     # So, allow nil.
     attribute :cloned_at, Types::Strict::Time.optional
 
-    attribute :path, Types::Pathname.constructor {|path| Pathname.new(path)}
-
     # @param root [String] git shelf root path
     # @param url [String] ex: 'https://github.com/mitsuru793/ruby-git-shelf'
     # @param category [String, nil]
     # @param cloned_at [Time]
     # @return [self]
-    def self.from_url(root, url, category, cloned_at)
+    def self.from_url(url, category, cloned_at)
       uri = URI.parse(url)
       (author, name) = uri.path.sub(/^\//, '').split('/')
       id = sprintf('%s/%s/%s', uri.host, author, name)
       url = sprintf('https://%s', id)
-      path = Pathname.new(root).join(category, uri.host, author, name).expand_path
-      new(id: id, url: url, name: name, author: author, path: path, host: uri.host, category: category, can_clone: true, cloned_at: cloned_at)
+      new(id: id, url: url, name: name, author: author, host: uri.host, category: category, can_clone: true, cloned_at: cloned_at)
     end
 
     # @param root [String] git shelf root path
@@ -50,15 +47,23 @@ module GitShelf
         cloned_at = nil
       end
 
-      self.from_url(root, url, category, cloned_at)
+      self.from_url(url, category, cloned_at)
     end
 
+    # @param root [String]
     # @return [void]
-    def shallow_clone
+    def shallow_clone(root = '.')
+      path = path(root)
       raise StandardError.new("Already cloned: #{path}") if path.exist?
       raise StandardError.new("Cannot clone: #{path}") unless can_clone
       FileUtils.mkdir_p(path)
       GitShelf::Git.clone(url, path.to_s, ['--depth=1'])
+    end
+
+    # @param root [String]
+    # @return [String]
+    def path(root = '.')
+      Pathname.new(root).join(category, host, author, name)
     end
   end
 end

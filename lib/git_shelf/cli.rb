@@ -17,9 +17,9 @@ module GitShelf
         end
       end
 
-      repository = GitShelf::Repository.from_url(config.shelf.path, url, category, Time.now)
+      repository = GitShelf::Repository.from_url(url, category, Time.now)
       begin
-        repository.shallow_clone
+        repository.shallow_clone(config.shelf.path)
       rescue StandardError => ex
         puts ex
       end
@@ -40,9 +40,9 @@ module GitShelf
       items = category.nil? ? repositories : repositories.select {|r| r.category == category}
       puts items.map {|r|
         if options[:absolute_path]
-          r.path
+          r.path(config.shelf.path).expand_path
         else
-          r.path.relative_path_from(config.shelf.path)
+          r.path
         end
       }.join("\n")
     end
