@@ -54,8 +54,9 @@ module GitShelf
     # @return [void]
     def shallow_clone(root = '.')
       path = path(root)
-      raise StandardError.new("Already cloned: #{path}") if path.exist?
-      raise StandardError.new("Cannot clone: #{path}") unless can_clone
+      if path.exist? || !can_clone
+        return
+      end
       FileUtils.mkdir_p(path)
       GitShelf::Git.clone(url, path.to_s, ['--depth=1'])
     end

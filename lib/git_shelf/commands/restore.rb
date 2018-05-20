@@ -6,7 +6,7 @@ module GitShelf
         repository_book = GitShelf::RepositoryBook.load(config)
         repository_book.repositories.each do |repo|
           begin
-            repo.shallow_clone
+            repo.shallow_clone(config.shelf.path)
           rescue StandardError => ex
             puts ex
           end
