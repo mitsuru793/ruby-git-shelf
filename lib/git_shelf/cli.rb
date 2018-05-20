@@ -8,19 +8,7 @@ module GitShelf
 
     register(GitShelf::Commands::Dump, 'dump', 'dump', 'Dump repositories directory tree as a yaml.')
 
-    desc "restore", "Clone repositories from a cached yaml."
-
-    def restore
-      config = load_config
-      repository_book = GitShelf::RepositoryBook.load(config)
-      repository_book.repositories.each do |repo|
-        begin
-          repo.shallow_clone
-        rescue StandardError => ex
-          puts ex
-        end
-      end
-    end
+    register(GitShelf::Commands::Restore, 'restore', 'restore', 'Clone repositories from a cached yaml.')
 
     register(GitShelf::Commands::Count, 'count', 'count CATEGORY', 'Count CATEGORY of repositories from cached yml. CATEGORY is listed on countable command.')
 
