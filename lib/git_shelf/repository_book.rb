@@ -11,7 +11,7 @@ module GitShelf
       @repositories = repositories
     end
 
-    # @param config [Config::Base]
+    # @param config [Config]
     # @return [self]
     def self.load(config)
       book_path = config.repository_book.path

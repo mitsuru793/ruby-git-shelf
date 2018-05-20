@@ -1,20 +1,30 @@
-require 'git_shelf/config/base'
-require 'git_shelf/config/shelf'
-require 'git_shelf/config/repository_book'
-
-module GitShelf::Config
-  # @param path [String]
-  # @return [Config::Base]
-  def self.load_file(path)
-    config_path = Pathname.new(path).expand_path
-    if config_path.symlink?
-      config_path = config_path.readlink.expand_path
+module GitShelf
+  class Config < Dry::Struct
+    attribute :shelf do
+      attribute :path, Types::Pathname
     end
 
-    config = YAML.load_file(config_path)
-    GitShelf::Config::Base.new(
-        GitShelf::Config::Shelf.new(config['shelf']['path']),
-        GitShelf::Config::RepositoryBook.new(config['repository_book']['path'])
-    )
+    attribute :repository_book do
+      attribute :path, Types::Pathname
+    end
+
+    # @param path [String]
+    # @return [self]
+    def self.load_file(path)
+      config_path = Pathname.new(path).expand_path
+      if config_path.symlink?
+        config_path = config_path.readlink.expand_path
+      end
+
+      config = YAML.load_file(config_path)
+      new(
+          shelf: {
+              path: config['shelf']['path']
+          },
+          repository_book: {
+              path: config['repository_book']['path']
+          }
+      )
+    end
   end
 end

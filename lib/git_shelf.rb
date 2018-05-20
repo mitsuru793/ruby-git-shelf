@@ -11,7 +11,7 @@ require 'dry-struct'
 module GitShelf
   module Types
     include Dry::Types.module
-    Pathname = Types.Instance(Pathname)
+    Pathname = Types.Instance(Pathname).constructor {|v| ::Pathname.new(v).expand_path}
   end
 end
 
