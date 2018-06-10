@@ -22,4 +22,20 @@ class GetTest < GitShelfUnitTest
     assert(repo[:can_clone])
     assert_equal(repo[:cloned_at].to_s, @now.to_s)
   end
+
+  def test_update_cache_after_get
+    path = Pathname.new(@config['shelf']['path']).join('ruby').expand_path
+    FileUtils.mkdir_p(path)
+
+    run_command(%w[get ruby https://github.com/mitsuru793/ruby-git-shelf])
+    run_command(%w[get ruby https://github.com/mitsuru793/ruby-pin-note])
+
+    book = YAML.load_file(File.expand_path(@config['repository_book']['path']))
+
+    repos = book['repositories']
+    assert_count(repos, 2)
+
+    assert_includes(repos, 'github.com/mitsuru793/ruby-git-shelf')
+    assert_includes(repos, 'github.com/mitsuru793/ruby-pin-note')
+  end
 end

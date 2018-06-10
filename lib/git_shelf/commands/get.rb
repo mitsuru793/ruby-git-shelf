@@ -25,6 +25,10 @@ module GitShelf
         end
 
         repository_book = GitShelf::RepositoryBook.load(config)
+        cached =  repository_book.repositories.find {|repo| repo.id === repository.id }
+        if !cached
+          repository_book.repositories.push(repository)
+        end
         repository_book.save(config.repository_book.path)
       end
     end
