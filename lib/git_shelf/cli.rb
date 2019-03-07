@@ -14,6 +14,8 @@ module GitShelf
 
     register(GitShelf::Commands::Countable, 'countable', 'countable', 'List countable category of repositories from cached yml. You can use it on count command.')
 
+    register(GitShelf::Commands::Config, 'config', 'config DOT_PATH', 'Get cache value by dot path like git config. ex: shelf.path')
+
     private
     def load_config
       GitShelf::Config.load_file(options[:config_path] || '~/.git-shelf')

@@ -77,6 +77,13 @@ $ git-shelf list ruby --no-base-path
 ruby/github.com/YorickPeterse/oga
 ruby/github.com/carr/phone
 ```
+
+### Get value from config.yml
+
+```shell
+$ git-shelf config shelf.path
+/Users/mitsuru793/code/git-shelf
+```
  
 ## Development
 
